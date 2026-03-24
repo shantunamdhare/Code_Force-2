@@ -275,6 +275,7 @@
             <span>CodeForce</span>
         </a>
         <div class="header-btns">
+            <a href="${pageContext.request.contextPath}/tester/quick-access" class="btn-lp btn-outline-lp" style="border-color: var(--primary-teal); color: var(--primary-teal);">Tester Area</a>
             <a href="${pageContext.request.contextPath}/login" class="btn-lp btn-outline-lp">Login</a>
             <a href="${pageContext.request.contextPath}/register" class="btn-lp btn-primary-lp">Get Professional <i class="ph ph-arrow-right"></i></a>
         </div>

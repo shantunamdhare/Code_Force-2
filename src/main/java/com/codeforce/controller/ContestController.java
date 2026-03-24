@@ -3,22 +3,25 @@ package com.codeforce.controller;
 import com.codeforce.model.Contest;
 import com.codeforce.model.User;
 import com.codeforce.service.ContestService;
-import com.codeforce.service.ProblemService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/contests")
-@RequiredArgsConstructor
 public class ContestController {
 
     private final ContestService contestService;
-    private final ProblemService problemService;
+
+    @Autowired
+    public ContestController(ContestService contestService) {
+        this.contestService = contestService;
+    }
 
     @GetMapping
     public String contests(Model model, HttpSession session) {
@@ -32,7 +35,7 @@ public class ContestController {
                 .filter(c -> c.getParticipants().stream().anyMatch(u -> u.getId().equals(currentUser.getId())))
                 .toList();
             model.addAttribute("myContests", myContests);
-            
+
             // Filter upcoming so they don't appear twice (optional, but cleaner)
             upcomingContests = upcomingContests.stream()
                 .filter(c -> c.getParticipants().stream().noneMatch(u -> u.getId().equals(currentUser.getId())))
@@ -65,15 +68,15 @@ public class ContestController {
     }
 
     @PostMapping("/register/{id}")
-    public String registerForContest(@PathVariable Long id, HttpSession session, 
-                                   org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+    public String registerForContest(@PathVariable Long id, HttpSession session,
+                                    RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) return "redirect:/login";
-        
+
         return contestService.findById(id).map(contest -> {
             boolean alreadyRegistered = contest.getParticipants().stream()
                     .anyMatch(u -> u.getId().equals(currentUser.getId()));
-            
+
             if (!alreadyRegistered) {
                 contest.getParticipants().add(currentUser);
                 contest.setParticipantCount(contest.getParticipants().size());

@@ -2,16 +2,20 @@ package com.codeforce.service;
 
 import com.codeforce.model.Contest;
 import com.codeforce.repository.ContestRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ContestService {
 
     private final ContestRepository contestRepository;
+
+    @Autowired
+    public ContestService(ContestRepository contestRepository) {
+        this.contestRepository = contestRepository;
+    }
 
     public List<Contest> getAllContests() {
         return contestRepository.findAllByOrderByStartTimeDesc();

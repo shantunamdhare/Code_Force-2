@@ -3,17 +3,21 @@ package com.codeforce.controller;
 import com.codeforce.model.User;
 import com.codeforce.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequiredArgsConstructor
 public class AuthController {
 
     private final UserService userService;
+
+    @Autowired
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
     public String loginPage(Model model, HttpSession session) {
@@ -69,16 +73,15 @@ public class AuthController {
             return "redirect:/register";
         }
 
-        User user = User.builder()
-                .handle(handle.trim())
-                .email(email.trim())
-                .password(password.trim())
-                .firstName(firstName != null ? firstName.trim() : null)
-                .lastName(lastName != null ? lastName.trim() : null)
-                .country(country != null ? country.trim() : null)
-                .city(city != null ? city.trim() : null)
-                .organization(organization != null ? organization.trim() : null)
-                .build();
+        User user = new User();
+        user.setHandle(handle.trim());
+        user.setEmail(email.trim());
+        user.setPassword(password.trim());
+        user.setFirstName(firstName != null ? firstName.trim() : null);
+        user.setLastName(lastName != null ? lastName.trim() : null);
+        user.setCountry(country != null ? country.trim() : null);
+        user.setCity(city != null ? city.trim() : null);
+        user.setOrganization(organization != null ? organization.trim() : null);
 
         user = userService.register(user);
         session.setAttribute("currentUser", user);

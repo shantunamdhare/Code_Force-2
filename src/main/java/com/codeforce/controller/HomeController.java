@@ -5,7 +5,7 @@ import com.codeforce.model.Contest;
 import com.codeforce.model.User;
 import com.codeforce.service.*;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 public class HomeController {
 
     private final BlogPostService blogPostService;
@@ -21,7 +20,16 @@ public class HomeController {
     private final UserService userService;
     private final SubmissionService submissionService;
 
-    @GetMapping("/")
+    @Autowired
+    public HomeController(BlogPostService blogPostService, ContestService contestService,
+                          UserService userService, SubmissionService submissionService) {
+        this.blogPostService = blogPostService;
+        this.contestService = contestService;
+        this.userService = userService;
+        this.submissionService = submissionService;
+    }
+
+    @GetMapping({"/", "/home"})
     public String index(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             return "redirect:/dashboard";
@@ -74,11 +82,10 @@ public class HomeController {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) return "redirect:/login";
 
-        BlogPost post = BlogPost.builder()
-                .title(title)
-                .content(content)
-                .author(currentUser)
-                .build();
+        BlogPost post = new BlogPost();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setAuthor(currentUser);
         blogPostService.save(post);
         return "redirect:/";
     }

@@ -1,20 +1,24 @@
 package com.codeforce.controller;
 
-import com.codeforce.model.User;
 import com.codeforce.service.SubmissionService;
 import com.codeforce.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequiredArgsConstructor
 public class ProfileController {
 
     private final UserService userService;
     private final SubmissionService submissionService;
+
+    @Autowired
+    public ProfileController(UserService userService, SubmissionService submissionService) {
+        this.userService = userService;
+        this.submissionService = submissionService;
+    }
 
     @GetMapping("/profile/{handle}")
     public String profile(@PathVariable String handle, Model model, HttpSession session) {
