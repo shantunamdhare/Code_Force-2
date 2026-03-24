@@ -69,7 +69,7 @@ public class User {
     private String avatarUrl;
 
     @Builder.Default
-    @Column(nullable = false)
+    @Column(name = "admin", nullable = true)
     private String role = "USER";
 
     public String getRankColor() {

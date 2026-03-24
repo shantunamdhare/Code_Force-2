@@ -19,10 +19,38 @@ public class DataInitializer implements CommandLineRunner {
     private final ContestRepository contestRepository;
     private final BlogPostRepository blogPostRepository;
     private final TagRepository tagRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() > 0) return;
+        System.out.println("--- Bootstrapping CodeForce Application Data ---");
+        
+        // Ensure Admin exists, has correct role and correctly hashed password
+        userRepository.findByHandle("admin").ifPresentOrElse(
+            admin -> {
+                System.out.println("Found existing 'admin' account. Ensuring role is ADMIN.");
+                if (!"ADMIN".equals(admin.getRole())) {
+                    admin.setRole("ADMIN");
+                    userRepository.save(admin);
+                }
+            },
+            () -> {
+                System.out.println("Creating new admin account...");
+                userRepository.save(User.builder()
+                        .handle("admin").email("admin@cf.com").password(passwordEncoder.encode("admin123"))
+                        .firstName("System").lastName("Admin")
+                        .role("ADMIN").rank("Admin").maxRank("Admin")
+                        .build());
+            }
+        );
+
+        if (userRepository.count() > 1) {
+            System.out.println("Data already initialized. Skipping sample users/problems.");
+            return;
+        }
+
+        System.out.println("Initializing sample data...");
+        String defaultPass = passwordEncoder.encode("pass123");
 
         // Create Tags
         Tag dp = tagRepository.save(Tag.builder().name("dp").problemCount(5).build());
@@ -40,102 +68,58 @@ public class DataInitializer implements CommandLineRunner {
         Tag dfs = tagRepository.save(Tag.builder().name("dfs and similar").problemCount(2).build());
         Tag trees = tagRepository.save(Tag.builder().name("trees").problemCount(2).build());
 
-        // Create Users
-        User tourist = userRepository.save(User.builder()
-                .handle("tourist").email("tourist@cf.com").password("pass123")
-                .firstName("Gennady").lastName("Korotkevich")
-                .country("Belarus").city("Gomel")
-                .organization("ITMO University")
-                .rating(3822).maxRating(3979)
-                .rank("Legendary Grandmaster").maxRank("Legendary Grandmaster")
-                .contribution(200).friendCount(15000)
-                .registrationTime(LocalDateTime.of(2010, 1, 1, 0, 0))
-                .build());
+        // Create realistic users
+        User u1 = userRepository.save(User.builder()
+                .handle("codeMaster99").email("cm99@cf.com").password(defaultPass)
+                .firstName("Robert").lastName("Miller")
+                .country("USA").city("Austin").organization("University of Texas")
+                .rating(2450).maxRating(2600).rank("Grandmaster").maxRank("Grandmaster")
+                .contribution(45).friendCount(500).registrationTime(LocalDateTime.now().minusYears(3)).build());
 
-        User jiangly = userRepository.save(User.builder()
-                .handle("jiangly").email("jiangly@cf.com").password("pass123")
-                .firstName("Jiang").lastName("Ly")
-                .country("China").city("Beijing")
-                .rating(3650).maxRating(3756)
-                .rank("Legendary Grandmaster").maxRank("Legendary Grandmaster")
-                .contribution(85).friendCount(8000)
-                .registrationTime(LocalDateTime.of(2018, 3, 15, 0, 0))
-                .build());
+        User u2 = userRepository.save(User.builder()
+                .handle("algoExpert").email("ae@cf.com").password(defaultPass)
+                .firstName("Elena").lastName("Petrova")
+                .country("Russia").city("Saint Petersburg").organization("ITMO University")
+                .rating(2900).maxRating(2950).rank("International Grandmaster").maxRank("International Grandmaster")
+                .contribution(120).friendCount(1200).registrationTime(LocalDateTime.now().minusYears(5)).build());
 
-        User benq = userRepository.save(User.builder()
-                .handle("Benq").email("benq@cf.com").password("pass123")
-                .firstName("Benjamin").lastName("Qi")
-                .country("United States").city("New York")
-                .organization("MIT")
-                .rating(3450).maxRating(3555)
-                .rank("Legendary Grandmaster").maxRank("Legendary Grandmaster")
-                .contribution(120).friendCount(9500)
-                .registrationTime(LocalDateTime.of(2017, 5, 20, 0, 0))
-                .build());
+        User u3 = userRepository.save(User.builder()
+                .handle("dpGeek").email("dg@cf.com").password(defaultPass)
+                .firstName("Sanjay").lastName("Gupta")
+                .country("India").city("Bangalore").organization("IIT Bombay")
+                .rating(1950).maxRating(2100).rank("Candidate Master").maxRank("Master")
+                .contribution(30).friendCount(300).registrationTime(LocalDateTime.now().minusYears(2)).build());
 
-        User ecnerwala = userRepository.save(User.builder()
-                .handle("ecnerwala").email("ecnerwala@cf.com").password("pass123")
-                .firstName("Andrew").lastName("He")
-                .country("United States").city("San Francisco")
-                .rating(3200).maxRating(3300)
-                .rank("International Grandmaster").maxRank("International Grandmaster")
-                .contribution(75).friendCount(6000)
-                .registrationTime(LocalDateTime.of(2015, 8, 10, 0, 0))
-                .build());
+        User u4 = userRepository.save(User.builder()
+                .handle("graphViz").email("gv@cf.com").password(defaultPass)
+                .firstName("Li").lastName("Wei")
+                .country("China").city("Shanghai").organization("Tsinghua University")
+                .rating(3200).maxRating(3300).rank("International Grandmaster").maxRank("International Grandmaster")
+                .contribution(85).friendCount(2500).registrationTime(LocalDateTime.now().minusYears(6)).build());
 
-        User petr = userRepository.save(User.builder()
-                .handle("Petr").email("petr@cf.com").password("pass123")
-                .firstName("Petr").lastName("Mitrichev")
-                .country("Russia").city("Moscow")
-                .organization("Google")
-                .rating(3100).maxRating(3380)
-                .rank("International Grandmaster").maxRank("Legendary Grandmaster")
-                .contribution(180).friendCount(12000)
-                .registrationTime(LocalDateTime.of(2009, 2, 1, 0, 0))
-                .build());
+        User u5 = userRepository.save(User.builder()
+                .handle("fastCoderX").email("fcx@cf.com").password(defaultPass)
+                .firstName("Hans").lastName("Schmidt")
+                .country("Germany").city("Berlin").organization("TU Berlin")
+                .rating(1550).maxRating(1700).rank("Expert").maxRank("Expert")
+                .contribution(15).friendCount(80).registrationTime(LocalDateTime.now().minusYears(1)).build());
 
-        User errichto = userRepository.save(User.builder()
-                .handle("Errichto").email("errichto@cf.com").password("pass123")
-                .firstName("Kamil").lastName("Debowski")
-                .country("Poland").city("Warsaw")
-                .rating(2850).maxRating(3050)
-                .rank("Grandmaster").maxRank("International Grandmaster")
-                .contribution(250).friendCount(10000)
-                .registrationTime(LocalDateTime.of(2013, 6, 1, 0, 0))
-                .build());
+        User u6 = userRepository.save(User.builder()
+                .handle("newbieAlgo").email("na@cf.com").password(defaultPass)
+                .firstName("Sarah").lastName("Jones")
+                .country("UK").city("Manchester")
+                .rating(1100).maxRating(1200).rank("Pupil").maxRank("Pupil")
+                .contribution(5).friendCount(15).registrationTime(LocalDateTime.now().minusMonths(6)).build());
 
-        User um_nik = userRepository.save(User.builder()
-                .handle("Um_nik").email("umnik@cf.com").password("pass123")
-                .firstName("Alex").lastName("Danilyuk")
-                .country("Ukraine").city("Kyiv")
-                .rating(2750).maxRating(2900)
-                .rank("Grandmaster").maxRank("Grandmaster")
-                .contribution(65).friendCount(5500)
-                .registrationTime(LocalDateTime.of(2014, 9, 15, 0, 0))
-                .build());
-
-        User newUser = userRepository.save(User.builder()
-                .handle("coder42").email("coder42@cf.com").password("pass123")
-                .firstName("Alex").lastName("Smith")
-                .country("India").city("Mumbai")
-                .rating(1550).maxRating(1600)
-                .rank("Expert").maxRank("Expert")
-                .contribution(10).friendCount(50)
-                .registrationTime(LocalDateTime.of(2023, 1, 1, 0, 0))
-                .build());
-
-        User pupilUser = userRepository.save(User.builder()
-                .handle("algoLearner").email("learner@cf.com").password("pass123")
-                .firstName("Sam").lastName("Johnson")
-                .country("UK").city("London")
-                .rating(1100).maxRating(1250)
-                .rank("Pupil").maxRank("Specialist")
-                .contribution(5).friendCount(20)
-                .registrationTime(LocalDateTime.of(2024, 6, 1, 0, 0))
-                .build());
+        User u7 = userRepository.save(User.builder()
+                .handle("bitManipulator").email("bm@cf.com").password(defaultPass)
+                .firstName("Yuki").lastName("Tanaka")
+                .country("Japan").city("Tokyo").organization("University of Tokyo")
+                .rating(2750).maxRating(2800).rank("Grandmaster").maxRank("Grandmaster")
+                .contribution(50).friendCount(900).registrationTime(LocalDateTime.now().minusYears(4)).build());
 
         User newbie = userRepository.save(User.builder()
-                .handle("newbieCoder").email("newbie@cf.com").password("pass123")
+                .handle("newbieCoder").email("newbie@cf.com").password(defaultPass)
                 .firstName("Min").lastName("Park")
                 .country("South Korea").city("Seoul")
                 .rating(800).maxRating(900)
@@ -146,7 +130,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Create Default Syed account for testing
         userRepository.save(User.builder()
-                .handle("syed").email("syed@cf.com").password("12345")
+                .handle("syed").email("syed@cf.com").password(defaultPass)
                 .firstName("Syed").lastName("User")
                 .country("Global")
                 .rating(0).maxRating(0)
@@ -211,7 +195,7 @@ public class DataInitializer implements CommandLineRunner {
                 .startTime(LocalDateTime.now().minusDays(8))
                 .description("High-level Div. 1 contest with advanced algorithmic challenges.")
                 .participantCount(5200)
-                .preparedBy("Petr")
+                .preparedBy("algoExpert")
                 .build());
 
         contestRepository.save(Contest.builder()
@@ -221,7 +205,7 @@ public class DataInitializer implements CommandLineRunner {
                 .startTime(LocalDateTime.now().minusDays(15))
                 .description("Open global round rated for all participants with 9 problems.")
                 .participantCount(32000)
-                .preparedBy("tourist")
+                .preparedBy("codeMaster99")
                 .build());
 
         // Create Problems
@@ -398,7 +382,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("Codeforces Round #940 Editorial")
                 .content("Here we present the editorial for all problems from Round #940. Problem A (Satisfying Constraints): The key observation is to track the maximum lower bound and minimum upper bound from type 1 and 2 constraints, then subtract excluded values. Problem B uses a greedy sorting approach...")
-                .author(tourist)
+                .author(u1)
                 .upvotes(156).downvotes(3)
                 .commentCount(42)
                 .createdAt(LocalDateTime.now().minusHours(6))
@@ -408,7 +392,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("Tips for Competitive Programming Beginners")
                 .content("Welcome to competitive programming! Here are my top tips for getting started: 1. Master the basics - arrays, strings, sorting. 2. Learn standard algorithms - BFS, DFS, binary search. 3. Practice daily on Codeforces. 4. Read editorials after contests. 5. Don't give up after wrong answers!")
-                .author(errichto)
+                .author(u2)
                 .upvotes(320).downvotes(5)
                 .commentCount(89)
                 .createdAt(LocalDateTime.now().minusDays(1))
@@ -418,7 +402,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("Segment Trees: A Complete Guide")
                 .content("In this blog, I explain segment trees from scratch. A segment tree is a data structure that allows you to answer range queries and perform range updates efficiently. Topics covered: basic segment tree, lazy propagation, persistent segment tree, and 2D segment trees.")
-                .author(benq)
+                .author(u3)
                 .upvotes(528).downvotes(8)
                 .commentCount(134)
                 .createdAt(LocalDateTime.now().minusDays(3))
@@ -428,7 +412,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("My Journey to Grandmaster")
                 .content("After 3 years of competitive programming, I finally reached Grandmaster rank! Here's what I learned along the way: consistency is key, always upsolve contest problems, focus on weak topics, and participate in every contest you can.")
-                .author(um_nik)
+                .author(u4)
                 .upvotes(245).downvotes(12)
                 .commentCount(67)
                 .createdAt(LocalDateTime.now().minusDays(5))
@@ -438,7 +422,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("Educational Round 170 Announcement")
                 .content("We are pleased to announce Educational Codeforces Round 170! The round will take place in 10 days. It will be rated for users with rating below 2100. Please register in advance. Good luck to all participants!")
-                .author(petr)
+                .author(u5)
                 .upvotes(89).downvotes(2)
                 .commentCount(23)
                 .createdAt(LocalDateTime.now().minusDays(7))
@@ -448,7 +432,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("Dynamic Programming Optimization Techniques")
                 .content("Advanced DP optimization techniques every competitive programmer should know: Convex Hull Trick, Divide and Conquer optimization, Knuth's optimization, and Aliens trick. Each technique with detailed examples and practice problems.")
-                .author(jiangly)
+                .author(u6)
                 .upvotes(412).downvotes(6)
                 .commentCount(95)
                 .createdAt(LocalDateTime.now().minusDays(10))
@@ -458,7 +442,7 @@ public class DataInitializer implements CommandLineRunner {
         blogPostRepository.save(BlogPost.builder()
                 .title("How to Prepare for ICPC Regionals")
                 .content("ICPC regionals are coming up! Here is a comprehensive preparation guide: team practice strategies, topic distribution among team members, library preparation, and mental preparation tips.")
-                .author(ecnerwala)
+                .author(u7)
                 .upvotes(178).downvotes(4)
                 .commentCount(51)
                 .createdAt(LocalDateTime.now().minusDays(12))

@@ -28,7 +28,12 @@ public class AuthController {
                         HttpSession session, RedirectAttributes redirectAttributes) {
         return userService.login(handle.trim(), password.trim())
                 .map(user -> {
+                    System.out.println("Login success for: " + user.getHandle() + " with role: " + user.getRole());
                     session.setAttribute("currentUser", user);
+                    if ("ADMIN".equals(user.getRole())) {
+                        System.out.println("Redirecting to admin dashboard...");
+                        return "redirect:/admin/dashboard";
+                    }
                     return "redirect:/";
                 })
                 .orElseGet(() -> {
