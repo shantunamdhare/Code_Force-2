@@ -2,16 +2,18 @@ package com.codeforce.service;
 
 import com.codeforce.model.Problem;
 import com.codeforce.repository.ProblemRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ProblemService {
 
     private final ProblemRepository problemRepository;
+
+    public ProblemService(ProblemRepository problemRepository) {
+        this.problemRepository = problemRepository;
+    }
 
     public List<Problem> getAllProblems() {
         return problemRepository.findAllByOrderByDifficultyRatingAsc();

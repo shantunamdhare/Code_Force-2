@@ -5,7 +5,6 @@ import com.codeforce.model.User;
 import com.codeforce.service.ContestService;
 import com.codeforce.service.ProblemService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/contests")
-@RequiredArgsConstructor
 public class ContestController {
 
     private final ContestService contestService;
     private final ProblemService problemService;
+
+    public ContestController(ContestService contestService, ProblemService problemService) {
+        this.contestService = contestService;
+        this.problemService = problemService;
+    }
 
     @GetMapping
     public String contests(Model model, HttpSession session) {

@@ -5,7 +5,6 @@ import com.codeforce.model.Contest;
 import com.codeforce.model.User;
 import com.codeforce.service.*;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 public class HomeController {
 
     private final BlogPostService blogPostService;
     private final ContestService contestService;
     private final UserService userService;
     private final SubmissionService submissionService;
+
+    public HomeController(BlogPostService blogPostService, ContestService contestService,
+                          UserService userService, SubmissionService submissionService) {
+        this.blogPostService = blogPostService;
+        this.contestService = contestService;
+        this.userService = userService;
+        this.submissionService = submissionService;
+    }
 
     @GetMapping("/")
     public String index(HttpSession session) {

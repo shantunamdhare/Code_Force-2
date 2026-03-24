@@ -3,16 +3,18 @@ package com.codeforce.service;
 import com.codeforce.model.BlogPost;
 import com.codeforce.model.User;
 import com.codeforce.repository.BlogPostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class BlogPostService {
 
     private final BlogPostRepository blogPostRepository;
+
+    public BlogPostService(BlogPostRepository blogPostRepository) {
+        this.blogPostRepository = blogPostRepository;
+    }
 
     public List<BlogPost> getAllPosts() {
         return blogPostRepository.findAllByOrderByCreatedAtDesc();

@@ -12,7 +12,7 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     List<Submission> findByUserOrderBySubmittedAtDesc(User user);
     List<Submission> findByProblemOrderBySubmittedAtDesc(Problem problem);
     List<Submission> findByUserAndVerdict(User user, String verdict);
-    List<Submission> findTop20ByOrderBySubmittedAtDesc();
+    List<Submission> findTop10ByOrderBySubmittedAtDesc();
     long countByUser(User user);
     long countByUserAndVerdict(User user, String verdict);
 }

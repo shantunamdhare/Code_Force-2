@@ -1,16 +1,12 @@
 package com.codeforce.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "problems")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
 public class Problem {
 
     @Id
@@ -44,22 +40,18 @@ public class Problem {
     @Column(columnDefinition = "TEXT")
     private String note;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer timeLimitMs = 2000;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer memoryLimitMb = 256;
 
     @Column(nullable = false)
     private Integer difficultyRating;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer solvedCount = 0;
 
-    @Builder.Default
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -69,14 +61,49 @@ public class Problem {
         joinColumns = @JoinColumn(name = "problem_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    @Builder.Default
     private Set<Tag> tags = new HashSet<>();
+
+    public Problem() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getContestId() { return contestId; }
+    public void setContestId(String contestId) { this.contestId = contestId; }
+    public String getIndexLetter() { return indexLetter; }
+    public void setIndexLetter(String indexLetter) { this.indexLetter = indexLetter; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getStatement() { return statement; }
+    public void setStatement(String statement) { this.statement = statement; }
+    public String getInputSpec() { return inputSpec; }
+    public void setInputSpec(String inputSpec) { this.inputSpec = inputSpec; }
+    public String getOutputSpec() { return outputSpec; }
+    public void setOutputSpec(String outputSpec) { this.outputSpec = outputSpec; }
+    public String getSampleInput() { return sampleInput; }
+    public void setSampleInput(String sampleInput) { this.sampleInput = sampleInput; }
+    public String getSampleOutput() { return sampleOutput; }
+    public void setSampleOutput(String sampleOutput) { this.sampleOutput = sampleOutput; }
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
+    public Integer getTimeLimitMs() { return timeLimitMs; }
+    public void setTimeLimitMs(Integer timeLimitMs) { this.timeLimitMs = timeLimitMs; }
+    public Integer getMemoryLimitMb() { return memoryLimitMb; }
+    public void setMemoryLimitMb(Integer memoryLimitMb) { this.memoryLimitMb = memoryLimitMb; }
+    public Integer getDifficultyRating() { return difficultyRating; }
+    public void setDifficultyRating(Integer difficultyRating) { this.difficultyRating = difficultyRating; }
+    public Integer getSolvedCount() { return solvedCount; }
+    public void setSolvedCount(Integer solvedCount) { this.solvedCount = solvedCount; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public Set<Tag> getTags() { return tags; }
+    public void setTags(Set<Tag> tags) { this.tags = tags; }
 
     public String getFullId() {
         return contestId + indexLetter;
     }
 
     public String getDifficultyColor() {
+        if (difficultyRating == null) return "#808080";
         if (difficultyRating >= 2400) return "#FF0000";
         if (difficultyRating >= 2100) return "#FF8C00";
         if (difficultyRating >= 1900) return "#AA00AA";
@@ -84,5 +111,57 @@ public class Problem {
         if (difficultyRating >= 1400) return "#03A89E";
         if (difficultyRating >= 1200) return "#008000";
         return "#808080";
+    }
+
+    public static ProblemBuilder builder() {
+        return new ProblemBuilder();
+    }
+
+    public static class ProblemBuilder {
+        private String contestId;
+        private String indexLetter;
+        private String name;
+        private String statement;
+        private String inputSpec;
+        private String outputSpec;
+        private String sampleInput;
+        private String sampleOutput;
+        private Integer timeLimitMs = 2000;
+        private Integer memoryLimitMb = 256;
+        private Integer difficultyRating;
+        private Integer solvedCount = 0;
+        private Set<Tag> tags = new HashSet<>();
+
+        public ProblemBuilder contestId(String id) { this.contestId = id; return this; }
+        public ProblemBuilder indexLetter(String index) { this.indexLetter = index; return this; }
+        public ProblemBuilder name(String name) { this.name = name; return this; }
+        public ProblemBuilder statement(String s) { this.statement = s; return this; }
+        public ProblemBuilder inputSpec(String i) { this.inputSpec = i; return this; }
+        public ProblemBuilder outputSpec(String o) { this.outputSpec = o; return this; }
+        public ProblemBuilder sampleInput(String si) { this.sampleInput = si; return this; }
+        public ProblemBuilder sampleOutput(String so) { this.sampleOutput = so; return this; }
+        public ProblemBuilder timeLimitMs(Integer t) { this.timeLimitMs = t; return this; }
+        public ProblemBuilder memoryLimitMb(Integer m) { this.memoryLimitMb = m; return this; }
+        public ProblemBuilder difficultyRating(Integer d) { this.difficultyRating = d; return this; }
+        public ProblemBuilder solvedCount(Integer sc) { this.solvedCount = sc; return this; }
+        public ProblemBuilder tags(Set<Tag> tags) { this.tags = tags; return this; }
+
+        public Problem build() {
+            Problem p = new Problem();
+            p.setContestId(contestId);
+            p.setIndexLetter(indexLetter);
+            p.setName(name);
+            p.setStatement(statement);
+            p.setInputSpec(inputSpec);
+            p.setOutputSpec(outputSpec);
+            p.setSampleInput(sampleInput);
+            p.setSampleOutput(sampleOutput);
+            p.setTimeLimitMs(timeLimitMs);
+            p.setMemoryLimitMb(memoryLimitMb);
+            p.setDifficultyRating(difficultyRating);
+            p.setSolvedCount(solvedCount);
+            p.setTags(tags);
+            return p;
+        }
     }
 }

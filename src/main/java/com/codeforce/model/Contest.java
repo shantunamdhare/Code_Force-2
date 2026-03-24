@@ -1,14 +1,10 @@
 package com.codeforce.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contests")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
 public class Contest {
 
     @Id
@@ -33,7 +29,6 @@ public class Contest {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer participantCount = 0;
 
@@ -42,6 +37,79 @@ public class Contest {
 
     @Column(length = 200)
     private String websiteUrl;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "contest_participants",
+        joinColumns = @JoinColumn(name = "contest_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private java.util.Set<User> participants = new java.util.HashSet<>();
+
+    public Contest() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public String getPhase() { return phase; }
+    public void setPhase(String phase) { this.phase = phase; }
+    public Integer getDurationSeconds() { return durationSeconds; }
+    public void setDurationSeconds(Integer durationSeconds) { this.durationSeconds = durationSeconds; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public Integer getParticipantCount() { return participantCount; }
+    public void setParticipantCount(Integer participantCount) { this.participantCount = participantCount; }
+    public String getPreparedBy() { return preparedBy; }
+    public void setPreparedBy(String preparedBy) { this.preparedBy = preparedBy; }
+    public String getWebsiteUrl() { return websiteUrl; }
+    public void setWebsiteUrl(String websiteUrl) { this.websiteUrl = websiteUrl; }
+    public java.util.Set<User> getParticipants() { return participants; }
+    public void setParticipants(java.util.Set<User> participants) { this.participants = participants; }
+
+    public static ContestBuilder builder() {
+        return new ContestBuilder();
+    }
+
+    public static class ContestBuilder {
+        private String name;
+        private String type;
+        private String phase;
+        private Integer durationSeconds;
+        private LocalDateTime startTime;
+        private String description;
+        private Integer participantCount = 0;
+        private String preparedBy;
+        private String websiteUrl;
+
+        public ContestBuilder name(String name) { this.name = name; return this; }
+        public ContestBuilder type(String type) { this.type = type; return this; }
+        public ContestBuilder phase(String phase) { this.phase = phase; return this; }
+        public ContestBuilder durationSeconds(Integer duration) { this.durationSeconds = duration; return this; }
+        public ContestBuilder startTime(LocalDateTime start) { this.startTime = start; return this; }
+        public ContestBuilder description(String desc) { this.description = desc; return this; }
+        public ContestBuilder participantCount(Integer count) { this.participantCount = count; return this; }
+        public ContestBuilder preparedBy(String p) { this.preparedBy = p; return this; }
+        public ContestBuilder websiteUrl(String url) { this.websiteUrl = url; return this; }
+
+        public Contest build() {
+            Contest c = new Contest();
+            c.setName(name);
+            c.setType(type);
+            c.setPhase(phase);
+            c.setDurationSeconds(durationSeconds);
+            c.setStartTime(startTime);
+            c.setDescription(description);
+            c.setParticipantCount(participantCount);
+            c.setPreparedBy(preparedBy);
+            c.setWebsiteUrl(websiteUrl);
+            return c;
+        }
+    }
 
     public String getFormattedDuration() {
         int hours = durationSeconds / 3600;
@@ -57,15 +125,6 @@ public class Contest {
             default -> "#3498DB";
         };
     }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "contest_participants",
-        joinColumns = @JoinColumn(name = "contest_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @Builder.Default
-    private java.util.Set<User> participants = new java.util.HashSet<>();
 
     public String getPhaseLabel() {
         return switch (phase) {

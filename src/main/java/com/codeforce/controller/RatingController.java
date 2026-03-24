@@ -2,16 +2,18 @@ package com.codeforce.controller;
 
 import com.codeforce.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequiredArgsConstructor
 public class RatingController {
 
     private final UserService userService;
+
+    public RatingController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/rating")
     public String rating(Model model, HttpSession session) {

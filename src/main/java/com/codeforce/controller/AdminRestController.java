@@ -2,7 +2,6 @@ package com.codeforce.controller;
 
 import com.codeforce.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +9,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
-@RequiredArgsConstructor
 public class AdminRestController {
 
     private final UserService userService;
     private final com.codeforce.service.ContestService contestService;
+
+    public AdminRestController(UserService userService, com.codeforce.service.ContestService contestService) {
+        this.userService = userService;
+        this.contestService = contestService;
+    }
 
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {

@@ -5,7 +5,6 @@ import com.codeforce.repository.ContestRepository;
 import com.codeforce.repository.ProblemRepository;
 import com.codeforce.repository.SubmissionRepository;
 import com.codeforce.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -24,6 +22,18 @@ public class UserService {
     private final ProblemRepository problemRepository;
     private final ContestRepository contestRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, 
+                       SubmissionRepository submissionRepository,
+                       ProblemRepository problemRepository,
+                       ContestRepository contestRepository,
+                       PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.submissionRepository = submissionRepository;
+        this.problemRepository = problemRepository;
+        this.contestRepository = contestRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public User register(User user) {
         user.setRank(user.getRankTitle());

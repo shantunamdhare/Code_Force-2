@@ -4,19 +4,22 @@ import com.codeforce.model.User;
 import com.codeforce.service.UserService;
 import com.codeforce.service.ContestService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
-@RequiredArgsConstructor
 public class AdminController {
 
     private final UserService userService;
     private final ContestService contestService;
+
+    public AdminController(UserService userService, ContestService contestService) {
+        this.userService = userService;
+        this.contestService = contestService;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {

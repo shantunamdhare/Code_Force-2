@@ -6,7 +6,6 @@ import com.codeforce.model.User;
 import com.codeforce.service.ProblemService;
 import com.codeforce.service.SubmissionService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,15 @@ import java.util.List;
 import java.util.Random;
 
 @Controller
-@RequiredArgsConstructor
 public class ProblemController {
 
     private final ProblemService problemService;
     private final SubmissionService submissionService;
+
+    public ProblemController(ProblemService problemService, SubmissionService submissionService) {
+        this.problemService = problemService;
+        this.submissionService = submissionService;
+    }
 
     @GetMapping("/problemset")
     public String problemset(@RequestParam(required = false) String tag,
