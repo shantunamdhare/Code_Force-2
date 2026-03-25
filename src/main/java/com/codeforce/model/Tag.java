@@ -18,8 +18,7 @@ public class Tag {
 
     public Tag() {}
 
-    public Tag(Long id, String name, Integer problemCount) {
-        this.id = id;
+    public Tag(String name, Integer problemCount) {
         this.name = name;
         this.problemCount = problemCount;
     }
@@ -30,4 +29,28 @@ public class Tag {
     public void setName(String name) { this.name = name; }
     public Integer getProblemCount() { return problemCount; }
     public void setProblemCount(Integer problemCount) { this.problemCount = problemCount; }
+
+    public static TagBuilder builder() {
+        return new TagBuilder();
+    }
+
+    public static class TagBuilder {
+        private String name;
+        private Integer problemCount = 0;
+
+        public TagBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public TagBuilder problemCount(Integer problemCount) {
+            this.problemCount = problemCount;
+            return this;
+        }
+
+        public Tag build() {
+            return new Tag(name, problemCount);
+        }
+    }
+
 }

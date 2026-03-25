@@ -36,7 +36,7 @@ public class SubmissionService {
     }
 
     public List<Submission> getRecentSubmissions() {
-        return submissionRepository.findTop20ByOrderBySubmittedAtDesc();
+        return submissionRepository.findTop10ByOrderBySubmittedAtDesc();
     }
 
     public long countByUser(User user) {

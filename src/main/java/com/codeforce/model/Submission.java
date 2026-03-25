@@ -69,6 +69,49 @@ public class Submission {
     public String getPassedTestCount() { return passedTestCount; }
     public void setPassedTestCount(String passedTestCount) { this.passedTestCount = passedTestCount; }
 
+    public static SubmissionBuilder builder() {
+        return new SubmissionBuilder();
+    }
+
+    public static class SubmissionBuilder {
+        private User user;
+        private Problem problem;
+        private Contest contest;
+        private String programmingLanguage;
+        private String verdict;
+        private Integer timeConsumedMs = 0;
+        private Integer memoryConsumedKb = 0;
+        private String sourceCode;
+        private LocalDateTime submittedAt = LocalDateTime.now();
+        private String passedTestCount;
+
+        public SubmissionBuilder user(User user) { this.user = user; return this; }
+        public SubmissionBuilder problem(Problem problem) { this.problem = problem; return this; }
+        public SubmissionBuilder contest(Contest contest) { this.contest = contest; return this; }
+        public SubmissionBuilder programmingLanguage(String lang) { this.programmingLanguage = lang; return this; }
+        public SubmissionBuilder verdict(String verdict) { this.verdict = verdict; return this; }
+        public SubmissionBuilder timeConsumedMs(Integer t) { this.timeConsumedMs = t; return this; }
+        public SubmissionBuilder memoryConsumedKb(Integer m) { this.memoryConsumedKb = m; return this; }
+        public SubmissionBuilder sourceCode(String source) { this.sourceCode = source; return this; }
+        public SubmissionBuilder submittedAt(LocalDateTime time) { this.submittedAt = time; return this; }
+        public SubmissionBuilder passedTestCount(String count) { this.passedTestCount = count; return this; }
+
+        public Submission build() {
+            Submission s = new Submission();
+            s.setUser(user);
+            s.setProblem(problem);
+            s.setContest(contest);
+            s.setProgrammingLanguage(programmingLanguage);
+            s.setVerdict(verdict);
+            s.setTimeConsumedMs(timeConsumedMs);
+            s.setMemoryConsumedKb(memoryConsumedKb);
+            s.setSourceCode(sourceCode);
+            s.setSubmittedAt(submittedAt);
+            s.setPassedTestCount(passedTestCount);
+            return s;
+        }
+    }
+
     public String getVerdictColor() {
         return switch (verdict) {
             case "Accepted" -> "#27AE60";

@@ -53,6 +53,9 @@
                     <li><a href="${pageContext.request.contextPath}/analytics" class="${param.activePage == 'analytics' ? 'active' : ''}">Analytics</a></li>
                 </c:if>
                 <li><a href="${pageContext.request.contextPath}/rating" class="${param.activePage == 'rating' ? 'active' : ''}">Rating</a></li>
+                <c:if test="${currentUser.role == 'ADMIN'}">
+                    <li><a href="${pageContext.request.contextPath}/admin/dashboard" style="color: var(--primary-amber); font-weight: 700;">Admin</a></li>
+                </c:if>
             </ul>
 
             <div class="navbar-search">

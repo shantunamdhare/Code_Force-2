@@ -48,6 +48,7 @@ public class Contest {
     )
     private Set<User> participants = new HashSet<>();
 
+
     public Contest() {}
 
     public Long getId() { return id; }
@@ -72,6 +73,47 @@ public class Contest {
     public void setWebsiteUrl(String websiteUrl) { this.websiteUrl = websiteUrl; }
     public Set<User> getParticipants() { return participants; }
     public void setParticipants(Set<User> participants) { this.participants = participants; }
+
+    public static ContestBuilder builder() {
+        return new ContestBuilder();
+    }
+
+    public static class ContestBuilder {
+        private String name;
+        private String type;
+        private String phase;
+        private Integer durationSeconds;
+        private LocalDateTime startTime;
+        private String description;
+        private Integer participantCount = 0;
+        private String preparedBy;
+        private String websiteUrl;
+
+        public ContestBuilder name(String name) { this.name = name; return this; }
+        public ContestBuilder type(String type) { this.type = type; return this; }
+        public ContestBuilder phase(String phase) { this.phase = phase; return this; }
+        public ContestBuilder durationSeconds(Integer duration) { this.durationSeconds = duration; return this; }
+        public ContestBuilder startTime(LocalDateTime start) { this.startTime = start; return this; }
+        public ContestBuilder description(String desc) { this.description = desc; return this; }
+        public ContestBuilder participantCount(Integer count) { this.participantCount = count; return this; }
+        public ContestBuilder preparedBy(String p) { this.preparedBy = p; return this; }
+        public ContestBuilder websiteUrl(String url) { this.websiteUrl = url; return this; }
+
+        public Contest build() {
+            Contest c = new Contest();
+            c.setName(name);
+            c.setType(type);
+            c.setPhase(phase);
+            c.setDurationSeconds(durationSeconds);
+            c.setStartTime(startTime);
+            c.setDescription(description);
+            c.setParticipantCount(participantCount);
+            c.setPreparedBy(preparedBy);
+            c.setWebsiteUrl(websiteUrl);
+            return c;
+        }
+    }
+
 
     public String getFormattedDuration() {
         int hours = durationSeconds / 3600;

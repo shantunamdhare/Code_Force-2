@@ -59,7 +59,7 @@ public class User {
     @Column(length = 500)
     private String avatarUrl;
 
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false)
     private String role = "USER";
 
     public User() {}
@@ -100,6 +100,70 @@ public class User {
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public static UserBuilder builder() {
+        return new UserBuilder();
+    }
+
+    public static class UserBuilder {
+        private String handle;
+        private String email;
+        private String password;
+        private String firstName;
+        private String lastName;
+        private String city;
+        private String country;
+        private String organization;
+        private Integer rating = 0;
+        private Integer maxRating = 0;
+        private String rank;
+        private String maxRank;
+        private Integer contribution = 0;
+        private Integer friendCount = 0;
+        private LocalDateTime registrationTime = LocalDateTime.now();
+        private String avatarUrl;
+        private String role = "USER";
+
+        public UserBuilder handle(String handle) { this.handle = handle; return this; }
+        public UserBuilder email(String email) { this.email = email; return this; }
+        public UserBuilder password(String password) { this.password = password; return this; }
+        public UserBuilder firstName(String firstName) { this.firstName = firstName; return this; }
+        public UserBuilder lastName(String lastName) { this.lastName = lastName; return this; }
+        public UserBuilder city(String city) { this.city = city; return this; }
+        public UserBuilder country(String country) { this.country = country; return this; }
+        public UserBuilder organization(String organization) { this.organization = organization; return this; }
+        public UserBuilder rating(Integer rating) { this.rating = rating; return this; }
+        public UserBuilder maxRating(Integer maxRating) { this.maxRating = maxRating; return this; }
+        public UserBuilder rank(String rank) { this.rank = rank; return this; }
+        public UserBuilder maxRank(String maxRank) { this.maxRank = maxRank; return this; }
+        public UserBuilder contribution(Integer contribution) { this.contribution = contribution; return this; }
+        public UserBuilder friendCount(Integer friendCount) { this.friendCount = friendCount; return this; }
+        public UserBuilder registrationTime(LocalDateTime regTime) { this.registrationTime = regTime; return this; }
+        public UserBuilder avatarUrl(String url) { this.avatarUrl = url; return this; }
+        public UserBuilder role(String role) { this.role = role; return this; }
+
+        public User build() {
+            User user = new User();
+            user.setHandle(handle);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setCity(city);
+            user.setCountry(country);
+            user.setOrganization(organization);
+            user.setRating(rating);
+            user.setMaxRating(maxRating);
+            user.setRank(rank);
+            user.setMaxRank(maxRank);
+            user.setContribution(contribution);
+            user.setFriendCount(friendCount);
+            user.setRegistrationTime(registrationTime);
+            user.setAvatarUrl(avatarUrl);
+            user.setRole(role);
+            return user;
+        }
+    }
 
     public String getRankColor() {
         if (rating >= 2400) return "#FF0000";

@@ -70,6 +70,7 @@ public class Problem {
     @JoinColumn(name = "tester_id")
     private User tester;
 
+
     public Problem() {}
 
     public Long getId() { return id; }
@@ -109,6 +110,7 @@ public class Problem {
     public User getTester() { return tester; }
     public void setTester(User tester) { this.tester = tester; }
 
+
     public String getFullId() {
         return contestId + indexLetter;
     }
@@ -123,4 +125,63 @@ public class Problem {
         if (difficultyRating >= 1200) return "#008000";
         return "#808080";
     }
+
+    public static ProblemBuilder builder() {
+        return new ProblemBuilder();
+    }
+
+    public static class ProblemBuilder {
+        private String contestId;
+        private String indexLetter;
+        private String name;
+        private String statement;
+        private String inputSpec;
+        private String outputSpec;
+        private String sampleInput;
+        private String sampleOutput;
+        private Integer timeLimitMs = 2000;
+        private Integer memoryLimitMb = 256;
+        private Integer difficultyRating;
+        private Integer solvedCount = 0;
+        private Set<Tag> tags = new HashSet<>();
+        private String status = "APPROVED";
+        private User tester;
+
+        public ProblemBuilder contestId(String id) { this.contestId = id; return this; }
+        public ProblemBuilder indexLetter(String index) { this.indexLetter = index; return this; }
+        public ProblemBuilder name(String name) { this.name = name; return this; }
+        public ProblemBuilder statement(String s) { this.statement = s; return this; }
+        public ProblemBuilder inputSpec(String i) { this.inputSpec = i; return this; }
+        public ProblemBuilder outputSpec(String o) { this.outputSpec = o; return this; }
+        public ProblemBuilder sampleInput(String si) { this.sampleInput = si; return this; }
+        public ProblemBuilder sampleOutput(String so) { this.sampleOutput = so; return this; }
+        public ProblemBuilder timeLimitMs(Integer t) { this.timeLimitMs = t; return this; }
+        public ProblemBuilder memoryLimitMb(Integer m) { this.memoryLimitMb = m; return this; }
+        public ProblemBuilder difficultyRating(Integer d) { this.difficultyRating = d; return this; }
+        public ProblemBuilder solvedCount(Integer sc) { this.solvedCount = sc; return this; }
+        public ProblemBuilder tags(Set<Tag> tags) { this.tags = tags; return this; }
+        public ProblemBuilder status(String status) { this.status = status; return this; }
+        public ProblemBuilder tester(User tester) { this.tester = tester; return this; }
+
+        public Problem build() {
+            Problem p = new Problem();
+            p.setContestId(contestId);
+            p.setIndexLetter(indexLetter);
+            p.setName(name);
+            p.setStatement(statement);
+            p.setInputSpec(inputSpec);
+            p.setOutputSpec(outputSpec);
+            p.setSampleInput(sampleInput);
+            p.setSampleOutput(sampleOutput);
+            p.setTimeLimitMs(timeLimitMs);
+            p.setMemoryLimitMb(memoryLimitMb);
+            p.setDifficultyRating(difficultyRating);
+            p.setSolvedCount(solvedCount);
+            p.setTags(tags);
+            p.setStatus(status);
+            p.setTester(tester);
+            return p;
+        }
+    }
+
 }

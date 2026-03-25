@@ -65,4 +65,41 @@ public class BlogPost {
     public Integer getScore() {
         return upvotes - downvotes;
     }
+
+    public static BlogPostBuilder builder() {
+        return new BlogPostBuilder();
+    }
+
+    public static class BlogPostBuilder {
+        private String title;
+        private String content;
+        private User author;
+        private Integer upvotes = 0;
+        private Integer downvotes = 0;
+        private Integer commentCount = 0;
+        private LocalDateTime createdAt = LocalDateTime.now();
+        private String tags;
+
+        public BlogPostBuilder title(String title) { this.title = title; return this; }
+        public BlogPostBuilder content(String content) { this.content = content; return this; }
+        public BlogPostBuilder author(User author) { this.author = author; return this; }
+        public BlogPostBuilder upvotes(Integer upvotes) { this.upvotes = upvotes; return this; }
+        public BlogPostBuilder downvotes(Integer downvotes) { this.downvotes = downvotes; return this; }
+        public BlogPostBuilder commentCount(Integer commentCount) { this.commentCount = commentCount; return this; }
+        public BlogPostBuilder createdAt(LocalDateTime createdAt) { this.createdAt = createdAt; return this; }
+        public BlogPostBuilder tags(String tags) { this.tags = tags; return this; }
+
+        public BlogPost build() {
+            BlogPost post = new BlogPost();
+            post.setTitle(title);
+            post.setContent(content);
+            post.setAuthor(author);
+            post.setUpvotes(upvotes);
+            post.setDownvotes(downvotes);
+            post.setCommentCount(commentCount);
+            post.setCreatedAt(createdAt);
+            post.setTags(tags);
+            return post;
+        }
+    }
 }

@@ -4,6 +4,7 @@ import com.codeforce.model.Contest;
 import com.codeforce.model.User;
 import com.codeforce.service.ContestService;
 import jakarta.servlet.http.HttpSession;
+import com.codeforce.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,12 @@ import java.util.List;
 public class ContestController {
 
     private final ContestService contestService;
+    private final ProblemService problemService;
 
     @Autowired
-    public ContestController(ContestService contestService) {
+    public ContestController(ContestService contestService, ProblemService problemService) {
         this.contestService = contestService;
+        this.problemService = problemService;
     }
 
     @GetMapping

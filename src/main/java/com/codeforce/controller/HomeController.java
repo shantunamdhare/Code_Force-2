@@ -30,6 +30,7 @@ public class HomeController {
     }
 
     @GetMapping({"/", "/home"})
+
     public String index(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             return "redirect:/dashboard";

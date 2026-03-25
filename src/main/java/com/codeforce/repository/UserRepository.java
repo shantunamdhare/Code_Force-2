@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByHandleAndPassword(String handle, String password);
     Optional<User> findByEmailAndPassword(String email, String password);
+    Optional<User> findByHandleOrEmail(String handle, String email);
     
     @org.springframework.data.jpa.repository.Query("SELECT u FROM User u WHERE (LOWER(u.handle) = LOWER(:login) OR LOWER(u.email) = LOWER(:login)) AND u.password = :password")
     Optional<User> findByLoginAndPassword(@org.springframework.data.repository.query.Param("login") String login, @org.springframework.data.repository.query.Param("password") String password);
