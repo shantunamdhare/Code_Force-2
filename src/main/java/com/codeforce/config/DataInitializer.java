@@ -43,10 +43,9 @@ public class DataInitializer implements CommandLineRunner {
         // Ensure Admin exists
         userRepository.findByHandle("admin").ifPresentOrElse(
             admin -> {
-                if (!"ADMIN".equals(admin.getRole())) {
-                    admin.setRole("ADMIN");
-                    userRepository.save(admin);
-                }
+                admin.setRole("ADMIN");
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                userRepository.save(admin);
             },
             () -> {
                 userRepository.save(User.builder()
@@ -58,16 +57,30 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         // Ensure Organizer exists
-        if (userRepository.findByHandle("organizer").isEmpty()) {
-            createOrganizer("organizer", "organizer@cf.com", passwordEncoder.encode("pass123"));
-        }
+        userRepository.findByHandle("organizer").ifPresentOrElse(
+            organizer -> {
+                organizer.setRole("ORGANIZER");
+                organizer.setPassword(passwordEncoder.encode("pass123"));
+                userRepository.save(organizer);
+            },
+            () -> {
+                createOrganizer("organizer", "organizer@cf.com", passwordEncoder.encode("pass123"));
+            }
+        );
 
         // Ensure Tester exists
-        if (userRepository.findByHandle("tester").isEmpty()) {
-            createUser("tester", "tester@cf.com", "pass123", "Default", "Tester",
-                    "Global", null, null, 1200, 1200,
-                    "Pupil", "Pupil", 0, 0, null);
-        }
+        userRepository.findByHandle("tester").ifPresentOrElse(
+            tester -> {
+                tester.setRole("USER");
+                tester.setPassword(passwordEncoder.encode("pass123"));
+                userRepository.save(tester);
+            },
+            () -> {
+                createUser("tester", "tester@cf.com", "pass123", "Default", "Tester",
+                        "Global", null, null, 1200, 1200,
+                        "Pupil", "Pupil", 0, 0, null);
+            }
+        );
 
         if (userRepository.count() > 3) {
             System.out.println("Data already initialized. Skipping sample users/problems.");

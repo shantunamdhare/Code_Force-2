@@ -43,6 +43,9 @@ public class Submission {
 
     @Column(length = 50)
     private String passedTestCount;
+    
+    @Column(nullable = false)
+    private Boolean isSecondChance = false;
 
     public Submission() {}
 
@@ -68,6 +71,8 @@ public class Submission {
     public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
     public String getPassedTestCount() { return passedTestCount; }
     public void setPassedTestCount(String passedTestCount) { this.passedTestCount = passedTestCount; }
+    public Boolean isSecondChance() { return isSecondChance; }
+    public void setSecondChance(Boolean isSecondChance) { this.isSecondChance = isSecondChance; }
 
     public static SubmissionBuilder builder() {
         return new SubmissionBuilder();
@@ -84,6 +89,7 @@ public class Submission {
         private String sourceCode;
         private LocalDateTime submittedAt = LocalDateTime.now();
         private String passedTestCount;
+        private Boolean isSecondChance = false;
 
         public SubmissionBuilder user(User user) { this.user = user; return this; }
         public SubmissionBuilder problem(Problem problem) { this.problem = problem; return this; }
@@ -95,6 +101,7 @@ public class Submission {
         public SubmissionBuilder sourceCode(String source) { this.sourceCode = source; return this; }
         public SubmissionBuilder submittedAt(LocalDateTime time) { this.submittedAt = time; return this; }
         public SubmissionBuilder passedTestCount(String count) { this.passedTestCount = count; return this; }
+        public SubmissionBuilder isSecondChance(Boolean isSC) { this.isSecondChance = isSC; return this; }
 
         public Submission build() {
             Submission s = new Submission();
@@ -108,6 +115,7 @@ public class Submission {
             s.setSourceCode(sourceCode);
             s.setSubmittedAt(submittedAt);
             s.setPassedTestCount(passedTestCount);
+            s.setSecondChance(isSecondChance);
             return s;
         }
     }

@@ -47,8 +47,30 @@ public class HomeController {
         List<Contest> upcomingContests = contestService.getUpcomingContests();
         List<User> topRated = userService.getTopRated();
 
-        model.addAttribute("totalSubmissions", submissionService.countByUser(currentUser));
-        model.addAttribute("acceptedSubmissions", submissionService.countAcceptedByUser(currentUser));
+        // Analytics Calculations
+        long totalSubmissions = submissionService.countByUser(currentUser);
+        long acceptedSubmissions = submissionService.countAcceptedByUser(currentUser);
+        double accuracy = totalSubmissions > 0 ? (double) acceptedSubmissions / totalSubmissions * 100 : 0;
+
+        // Topic Progress (Mocked for dashboard overview)
+        String[] featuredTopics = {"Arrays", "Trees", "DP", "Graphs"};
+        java.util.Map<String, Integer> topicProgress = new java.util.HashMap<>();
+        for (String topic : featuredTopics) {
+            topicProgress.put(topic, (int) (Math.random() * 80) + 10); // Mock progress 10-90%
+        }
+
+        // Second Chance Opportunity
+        List<Contest> finishedContests = contestService.getFinishedContests();
+        Contest secondChanceContest = finishedContests.isEmpty() ? null : finishedContests.get(0);
+
+        model.addAttribute("totalSubmissions", totalSubmissions);
+        model.addAttribute("acceptedSubmissions", acceptedSubmissions);
+        model.addAttribute("accuracy", String.format("%.1f", accuracy));
+        model.addAttribute("streak", 12); // Mock streak
+        model.addAttribute("timeSpent", "42h"); // Mock time
+        model.addAttribute("topicProgress", topicProgress);
+        model.addAttribute("secondChanceContest", secondChanceContest);
+        
         model.addAttribute("posts", recentPosts);
         model.addAttribute("upcomingContests", upcomingContests);
         model.addAttribute("topRated", topRated);

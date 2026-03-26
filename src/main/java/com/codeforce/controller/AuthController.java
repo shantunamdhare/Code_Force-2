@@ -32,15 +32,24 @@ public class AuthController {
                         HttpSession session, RedirectAttributes redirectAttributes) {
         return userService.login(handle.trim(), password.trim())
                 .map(user -> {
-                    System.out.println("Login success for: " + user.getHandle() + " with role: " + user.getRole());
+                    System.out.println("Login success for handle: " + handle + " (found: " + user.getHandle() + ")");
                     session.setAttribute("currentUser", user);
+                    
+                    // Manually set authentication in SecurityContext
+                    org.springframework.security.core.Authentication auth = 
+                        new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                            user.getHandle(), null, 
+                            java.util.Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                        );
+                    org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
+                    
                     if ("ADMIN".equals(user.getRole())) {
-                        System.out.println("Redirecting to admin dashboard...");
                         return "redirect:/admin/dashboard";
                     }
                     return "redirect:/";
                 })
                 .orElseGet(() -> {
+                    System.out.println("Login failed for handle: " + handle);
                     redirectAttributes.addFlashAttribute("error", "Invalid handle or password");
                     return "redirect:/login";
                 });
@@ -89,7 +98,17 @@ public class AuthController {
         user.setOrganization(organization != null ? organization.trim() : null);
 
         user = userService.register(user);
+        System.out.println("Registration success for: " + handle);
         session.setAttribute("currentUser", user);
+        
+        // Manually set authentication in SecurityContext
+        org.springframework.security.core.Authentication auth = 
+            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                user.getHandle(), null, 
+                java.util.Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_USER"))
+            );
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
+        
         return "redirect:/";
     }
 

@@ -15,4 +15,10 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     List<Submission> findTop10ByOrderBySubmittedAtDesc();
     long countByUser(User user);
     long countByUserAndVerdict(User user, String verdict);
+    
+    // Second Chance Queries
+    List<Submission> findByUserAndContestAndIsSecondChanceOrderBySubmittedAtDesc(
+            User user, com.codeforce.model.Contest contest, Boolean isSecondChance);
+            
+    long countByUserAndIsSecondChanceAndVerdict(User user, Boolean isSecondChance, String verdict);
 }

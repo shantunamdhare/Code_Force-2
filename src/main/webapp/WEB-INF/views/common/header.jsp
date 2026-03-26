@@ -46,8 +46,8 @@
             </a>
 
             <ul class="navbar-nav" id="navbarNav">
-                <li><a href="${pageContext.request.contextPath}/" class="${param.activePage == 'home' ? 'active' : ''}">Dashboard</a></li>
-                <li><a href="${pageContext.request.contextPath}/problemset" class="${param.activePage == 'problemset' ? 'active' : ''}">Practice</a></li>
+                <li><a href="${pageContext.request.contextPath}/practice" class="${param.activePage == 'practice' ? 'active' : ''}"><i class="ph-bold ph-sketch-logo"></i> Practice</a></li>
+                <li><a href="${pageContext.request.contextPath}/problemset" class="${param.activePage == 'problemset' ? 'active' : ''}">Problems</a></li>
                 <li><a href="${pageContext.request.contextPath}/contests" class="${param.activePage == 'contests' ? 'active' : ''}">Contests</a></li>
                 <c:if test="${not empty currentUser}">
                     <li><a href="${pageContext.request.contextPath}/analytics" class="${param.activePage == 'analytics' ? 'active' : ''}">Analytics</a></li>

@@ -360,6 +360,7 @@
             <span>CodeForce</span>
         </a>
         <div class="header-btns">
+            <a href="${pageContext.request.contextPath}/practice" class="btn-lp btn-outline-lp" style="border-color: var(--primary-coral); color: var(--primary-coral);">Practice</a>
             <a href="${pageContext.request.contextPath}/tester/quick-access" class="btn-lp btn-outline-lp" style="border-color: var(--primary-teal); color: var(--primary-teal);">Tester Area</a>
             <a href="${pageContext.request.contextPath}/login" class="btn-lp btn-outline-lp">Login</a>
             <a href="${pageContext.request.contextPath}/register" class="btn-lp btn-primary-lp">Get Professional <i class="ph ph-arrow-right"></i></a>
@@ -491,6 +492,12 @@
     </section>
 
     <section class="features-grid">
+        <div class="feature-tile" style="border-color: var(--primary-coral); background: rgba(255, 107, 107, 0.02);">
+            <div class="tile-icon" style="background: var(--primary-coral); color: white;"><i class="ph-bold ph-graduation-cap"></i></div>
+            <h3>Guided Practice</h3>
+            <p>Master algorithms with structured learning paths. Track your progress across Math, DP, Graphs, and more with smart recommendations.</p>
+            <a href="${pageContext.request.contextPath}/practice" style="margin-top: 20px; display: inline-block; font-weight: 700; color: var(--primary-coral); text-decoration: none;">Start Learning <i class="ph ph-arrow-right"></i></a>
+        </div>
         <div class="feature-tile">
             <div class="tile-icon"><i class="ph-bold ph-lightning"></i></div>
             <h3>Atomic Speed</h3>

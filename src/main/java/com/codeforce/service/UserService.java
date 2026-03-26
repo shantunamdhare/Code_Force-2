@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public Optional<User> login(String handleOrEmail, String password) {
-        return userRepository.findByHandleOrEmail(handleOrEmail, handleOrEmail)
+        return userRepository.findByHandleOrEmailIgnoreCase(handleOrEmail)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()));
     }
 
@@ -70,11 +70,11 @@ public class UserService {
     }
 
     public boolean handleExists(String handle) {
-        return userRepository.existsByHandle(handle);
+        return userRepository.existsByHandleIgnoreCase(handle);
     }
 
     public boolean emailExists(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailIgnoreCase(email);
     }
 
     public User save(User user) {

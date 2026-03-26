@@ -53,6 +53,9 @@ public class ContestController {
         return "contests";
     }
 
+    @Autowired
+    private com.codeforce.service.SubmissionService submissionService;
+
     @GetMapping("/{id}")
     public String contestDetail(@PathVariable Long id, Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -64,6 +67,22 @@ public class ContestController {
                         boolean registered = contest.getParticipants().stream()
                                 .anyMatch(u -> u.getId().equals(currentUser.getId()));
                         model.addAttribute("registered", registered);
+
+                        if ("FINISHED".equals(contest.getPhase())) {
+                            List<com.codeforce.model.Submission> official = submissionService.getOfficialContestSubmissions(currentUser, contest);
+                            List<com.codeforce.model.Submission> retry = submissionService.getSecondChanceSubmissions(currentUser, contest);
+                            
+                            long officialScore = official.stream().filter(s -> "Accepted".equals(s.getVerdict())).count();
+                            long retryScore = retry.stream().filter(s -> "Accepted".equals(s.getVerdict())).count();
+                            
+                            model.addAttribute("officialSubmissions", official);
+                            model.addAttribute("secondChanceSubmissions", retry);
+                            model.addAttribute("officialScore", officialScore);
+                            model.addAttribute("improvedScore", Math.max(officialScore, retryScore));
+                        }
+                        
+                        List<com.codeforce.model.Problem> contestProblems = problemService.findByContest(contest.getId().toString());
+                        model.addAttribute("contestProblems", contestProblems);
                     }
                     return "contest-detail";
                 })

@@ -41,6 +41,23 @@ public class ProblemService {
         return problemRepository.findByTags_NameIgnoreCase(tagName);
     }
 
+    public List<Problem> getProblemsByTopicAndDifficulty(String topic, String difficulty) {
+        return switch (difficulty.toLowerCase()) {
+            case "easy" -> problemRepository.findByTags_NameIgnoreCaseAndDifficultyRatingBetween(topic, 0, 1200);
+            case "medium" -> problemRepository.findByTags_NameIgnoreCaseAndDifficultyRatingBetween(topic, 1201, 1800);
+            case "hard" -> problemRepository.findByTags_NameIgnoreCaseAndDifficultyRatingBetween(topic, 1801, 3500);
+            default -> problemRepository.findByTags_NameIgnoreCase(topic);
+        };
+    }
+
+    public List<Problem> getRecommendedProblems(com.codeforce.model.User user) {
+        // Simple recommendation: pick problems from topics the user hasn't solved yet
+        // For now, return a few random problems of moderate difficulty
+        return problemRepository.findByDifficultyRatingBetween(1000, 1600).stream()
+                .limit(3)
+                .toList();
+    }
+
     public Problem save(Problem problem) {
         return problemRepository.save(problem);
     }

@@ -10,16 +10,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByHandle(String handle);
     Optional<User> findByEmail(String email);
-    Optional<User> findByHandleAndPassword(String handle, String password);
-    Optional<User> findByEmailAndPassword(String email, String password);
-    Optional<User> findByHandleOrEmail(String handle, String email);
+
+    @org.springframework.data.jpa.repository.Query("SELECT u FROM User u WHERE (LOWER(u.handle) = LOWER(:login) OR LOWER(u.email) = LOWER(:login))")
+    Optional<User> findByHandleOrEmailIgnoreCase(@org.springframework.data.repository.query.Param("login") String login);
     
-    @org.springframework.data.jpa.repository.Query("SELECT u FROM User u WHERE (LOWER(u.handle) = LOWER(:login) OR LOWER(u.email) = LOWER(:login)) AND u.password = :password")
-    Optional<User> findByLoginAndPassword(@org.springframework.data.repository.query.Param("login") String login, @org.springframework.data.repository.query.Param("password") String password);
     List<User> findTop10ByOrderByRatingDesc();
     List<User> findAllByOrderByRatingDesc();
     List<User> findByCountryOrderByRatingDesc(String country);
     List<User> findByHandleContainingIgnoreCase(String handle);
-    boolean existsByHandle(String handle);
-    boolean existsByEmail(String email);
+    boolean existsByHandleIgnoreCase(String handle);
+    boolean existsByEmailIgnoreCase(String email);
 }

@@ -10,6 +10,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
     List<Problem> findByDifficultyRatingBetween(Integer min, Integer max);
     List<Problem> findByNameContainingIgnoreCase(String name);
     List<Problem> findByTags_NameIgnoreCase(String tagName);
+    List<Problem> findByTags_NameIgnoreCaseAndDifficultyRatingBetween(String tagName, Integer min, Integer max);
     List<Problem> findAllByOrderByDifficultyRatingAsc();
     
     // New methods for Tester Dashboard

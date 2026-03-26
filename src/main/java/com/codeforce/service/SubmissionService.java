@@ -46,4 +46,16 @@ public class SubmissionService {
     public long countAcceptedByUser(User user) {
         return submissionRepository.countByUserAndVerdict(user, "Accepted");
     }
+
+    public List<Submission> getSecondChanceSubmissions(User user, com.codeforce.model.Contest contest) {
+        return submissionRepository.findByUserAndContestAndIsSecondChanceOrderBySubmittedAtDesc(user, contest, true);
+    }
+
+    public List<Submission> getOfficialContestSubmissions(User user, com.codeforce.model.Contest contest) {
+        return submissionRepository.findByUserAndContestAndIsSecondChanceOrderBySubmittedAtDesc(user, contest, false);
+    }
+
+    public long countSecondChanceAcceptedByUser(User user) {
+        return submissionRepository.countByUserAndIsSecondChanceAndVerdict(user, true, "Accepted");
+    }
 }

@@ -108,6 +108,8 @@
                 <div class="submit-panel">
                     <h3>&#128187; Submit Solution</h3>
                     <form action="${pageContext.request.contextPath}/problem/${problem.id}/submit" method="post">
+                        <input type="hidden" name="contestId" value="${contestId}">
+                        <input type="hidden" name="isSecondChance" value="${isSecondChance}">
                         <div class="form-group">
                             <label class="form-label">Programming Language</label>
                             <select name="language" class="form-control" style="max-width:300px;">

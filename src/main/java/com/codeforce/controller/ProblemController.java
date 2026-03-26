@@ -53,11 +53,16 @@ public class ProblemController {
     }
 
     @GetMapping("/problem/{id}")
-    public String problemDetail(@PathVariable Long id, Model model, HttpSession session) {
+    public String problemDetail(@PathVariable Long id, 
+                                @RequestParam(required = false) Long contestId,
+                                @RequestParam(required = false) Boolean retry,
+                                Model model, HttpSession session) {
         return problemService.findById(id)
                 .map(problem -> {
                     model.addAttribute("problem", problem);
                     model.addAttribute("currentUser", session.getAttribute("currentUser"));
+                    model.addAttribute("contestId", contestId);
+                    model.addAttribute("isSecondChance", retry != null && retry);
                     return "problem-detail";
                 })
                 .orElse("redirect:/problemset");
@@ -67,6 +72,8 @@ public class ProblemController {
     public String submitSolution(@PathVariable Long id,
                                   @RequestParam String language,
                                   @RequestParam String sourceCode,
+                                  @RequestParam(required = false) Long contestId,
+                                  @RequestParam(required = false) Boolean isSecondChance,
                                   HttpSession session,
                                   RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -76,7 +83,7 @@ public class ProblemController {
 
         return problemService.findById(id)
                 .map(problem -> {
-                    // Simulate verdict (in a real system this would compile and run code)
+                    // Simulate verdict
                     String[] verdicts = {"Accepted", "Wrong Answer", "Time Limit Exceeded", "Runtime Error"};
                     Random random = new Random();
                     String verdict = verdicts[random.nextInt(verdicts.length)];
@@ -91,6 +98,13 @@ public class ProblemController {
                     submission.setSourceCode(sourceCode);
                     submission.setSubmittedAt(LocalDateTime.now());
                     submission.setPassedTestCount(verdict.equals("Accepted") ? "All" : String.valueOf(random.nextInt(20) + 1));
+                    
+                    if (isSecondChance != null && isSecondChance && contestId != null) {
+                        submission.setSecondChance(true);
+                        com.codeforce.model.Contest contest = new com.codeforce.model.Contest();
+                        contest.setId(contestId);
+                        submission.setContest(contest);
+                    }
 
                     submissionService.submit(submission);
 
