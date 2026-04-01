@@ -16,7 +16,7 @@
 	<description>Competitive Programming Platform - Like Codeforces</description>
 
 	<properties>
-		<java.version>25</java.version>
+		<java.version>21</java.version>
 	</properties>
 
 	<dependencies>

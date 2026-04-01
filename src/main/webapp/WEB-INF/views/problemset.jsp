@@ -42,7 +42,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span style="font-weight: 700; color:${problem.getDifficultyColor()}">${problem.difficultyRating}</span>
+                                <span style="font-weight: 700; color:${problem.difficultyColor}">${problem.difficultyRating}</span>
                             </td>
                             <td class="mono" style="font-size: 0.82rem; color: var(--text-muted);">&#128101; ${problem.solvedCount}</td>
                             <td>
@@ -86,13 +86,17 @@
                 <h3><span class="card-icon" style="background:rgba(247,183,49,0.1);color:var(--primary-amber);">&#127991;</span>Popular Tags</h3>
             </div>
             <div class="card-body" style="display: flex; flex-wrap: wrap; gap: 8px;">
-                <c:set var="tagNames" value="${['Math', 'Implementation', 'DP', 'Greedy', 'Data Structures', 'Graphs', 'Strings', 'Sorting', 'Geometry']}" />
-                <c:forEach var="tagName" items="${tagNames}">
-                    <a href="${pageContext.request.contextPath}/problemset?tag=${tagName}" 
-                       class="tag ${selectedTag == tagName ? 'tag-coral' : 'tag-amber'}">
-                       ${tagName}
-                    </a>
-                </c:forEach>
+                <c:set var="tagList" value="Math,Implementation,DP,Greedy,Data Structures,Graphs,Strings,Sorting,Geometry" />
+                <c:forTokens var="tagName" items="${tagList}" delims=",">
+                    <c:choose>
+                        <c:when test="${selectedTag == tagName}">
+                            <a href="${pageContext.request.contextPath}/problemset?tag=${tagName}" class="tag tag-coral">${tagName}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/problemset?tag=${tagName}" class="tag tag-amber">${tagName}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forTokens>
             </div>
         </div>
 

@@ -1,3 +1,10 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<jsp:include page="common/header.jsp">
+    <jsp:param name="pageTitle" value="Practice" />
+    <jsp:param name="activePage" value="practice" />
+</jsp:include>
+
 <style>
     .learning-path-header {
         background: linear-gradient(135deg, var(--primary-indigo), var(--primary-purple));
@@ -79,31 +86,127 @@
     </div>
 
     <div class="topic-journey-grid">
-        <c:set var="topics" value="${['Arrays', 'Trees', 'DP', 'Graphs', 'Math', 'Strings']}" />
-        <c:set var="descriptions" value="${['Foundational data structures', 'Recursive hierarchical logic', 'Advanced optimization', 'Network & connectivity', 'Number theory & combinatorics', 'Parsing & logic']}" />
-        <c:set var="icons" value="${['ph-brackets-square', 'ph-tree-structure', 'ph-cube', 'ph-graph', 'ph-function', 'ph-text-t']}" />
-        
-        <c:forEach var="topic" items="${topics}" varStatus="status">
-            <a href="${pageContext.request.contextPath}/practice/${topic}" class="journey-card">
-                <div class="journey-icon"><i class="ph-bold ${icons[status.index]}"></i></div>
-                <div class="path-step">
-                    <div class="step-dot active"></div>
-                    <div class="step-dot"></div>
-                    <div class="step-dot"></div>
-                    <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
-                </div>
-                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">${topic}</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">${descriptions[status.index]}</p>
-                
-                <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
-                    <div class="progress-bar-fill" style="width: ${topicProgress[topic]}%; border-radius: 5px;"></div>
-                </div>
-                <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
-                    <span style="color: var(--text-muted);">Mastery</span>
-                    <span>${topicProgress[topic]}%</span>
-                </div>
-            </a>
-        </c:forEach>
+
+        <%-- Arrays --%>
+        <a href="${pageContext.request.contextPath}/practice/Arrays" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-brackets-square"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Arrays</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Foundational data structures</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['Arrays']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['Arrays']}%</span>
+            </div>
+        </a>
+
+        <%-- Trees --%>
+        <a href="${pageContext.request.contextPath}/practice/Trees" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-tree-structure"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Trees</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Recursive hierarchical logic</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['Trees']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['Trees']}%</span>
+            </div>
+        </a>
+
+        <%-- DP --%>
+        <a href="${pageContext.request.contextPath}/practice/DP" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-cube"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">DP</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Advanced optimization</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['DP']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['DP']}%</span>
+            </div>
+        </a>
+
+        <%-- Graphs --%>
+        <a href="${pageContext.request.contextPath}/practice/Graphs" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-graph"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Graphs</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Network &amp; connectivity</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['Graphs']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['Graphs']}%</span>
+            </div>
+        </a>
+
+        <%-- Math --%>
+        <a href="${pageContext.request.contextPath}/practice/Math" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-function"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Math</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Number theory &amp; combinatorics</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['Math']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['Math']}%</span>
+            </div>
+        </a>
+
+        <%-- Strings --%>
+        <a href="${pageContext.request.contextPath}/practice/Strings" class="journey-card">
+            <div class="journey-icon"><i class="ph-bold ph-text-t"></i></div>
+            <div class="path-step">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <span style="color: var(--primary-indigo); margin-left:8px;">Easy Level</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Strings</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Parsing &amp; logic</p>
+            <div class="progress-bar-container" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar-fill" style="width: ${topicProgress['Strings']}%; border-radius: 5px;"></div>
+            </div>
+            <div style="display:flex; justify-content: space-between; width: 100%; margin-top: 12px; font-weight: 800; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Mastery</span>
+                <span>${topicProgress['Strings']}%</span>
+            </div>
+        </a>
+
     </div>
 
     <div class="widget-modern" style="margin-top: 60px; background: #F8FAFC; border-radius: 40px; padding: 60px; display: flex; align-items: center; gap: 60px;">
