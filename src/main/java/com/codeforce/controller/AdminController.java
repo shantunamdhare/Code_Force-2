@@ -24,7 +24,7 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
+        if (currentUser == null || (!"ADMIN".equals(currentUser.getRole()) && !"ORGANIZER".equalsIgnoreCase(currentUser.getRole()))) {
             return "redirect:/login";
         }
 

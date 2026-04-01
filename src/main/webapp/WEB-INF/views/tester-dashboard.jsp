@@ -12,7 +12,7 @@
             <p style="color: var(--text-secondary);">Validate, test, and provide feedback on upcoming problems.</p>
         </div>
 
-        <c:set var="isTester" value="${not empty currentUser and currentUser.handle eq 'tester'}" />
+        <c:set var="isTester" value="${not empty currentUser and (currentUser.role eq 'TESTER' or currentUser.role eq 'ADMIN')}" />
 
         <c:if test="${not isTester}">
             <div class="card" style="padding: 32px; margin-bottom: 32px; border-top: 4px solid var(--primary-coral); max-width: 500px; margin-left: auto; margin-right: auto;">

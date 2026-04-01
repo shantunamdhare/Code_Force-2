@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByHandleContainingIgnoreCase(String handle);
     boolean existsByHandleIgnoreCase(String handle);
     boolean existsByEmailIgnoreCase(String email);
+    long countByRatingGreaterThan(Integer rating);
 }

@@ -27,6 +27,24 @@ public class PracticeController {
         this.submissionService = submissionService;
     }
 
+    public static class TopicData {
+        private String name;
+        private String description;
+        private String icon;
+        private int progress;
+
+        public TopicData(String name, String description, String icon, int progress) {
+            this.name = name;
+            this.description = description;
+            this.icon = icon;
+            this.progress = progress;
+        }
+        public String getName() { return name; }
+        public String getDescription() { return description; }
+        public String getIcon() { return icon; }
+        public int getProgress() { return progress; }
+    }
+
     @GetMapping
     public String dashboard(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -39,18 +57,48 @@ public class PracticeController {
         long totalSubmissions = submissionService.countByUser(currentUser);
         double accuracy = totalSubmissions > 0 ? (double) totalSolved / totalSubmissions * 100 : 0;
         
-        // Topic progress (Simplified calculation: count problems with these tags that are solved)
-        String[] topics = {"Math", "Implementation", "DP", "Greedy", "Data Structures", "Graphs", "Strings"};
-        Map<String, Integer> topicProgress = new java.util.HashMap<>();
-        for (String topic : topics) {
-            // This is just a mockup progress value for demonstration
-            topicProgress.put(topic, (int) (Math.random() * 100));
+        // Topic data
+        String[] topicNames = {"Arrays", "Trees", "DP", "Graphs", "Math", "Strings"};
+        String[] descriptions = {
+            "Foundational data structures",
+            "Recursive hierarchical logic",
+            "Advanced optimization",
+            "Network & connectivity",
+            "Number theory & combinatorics",
+            "Parsing & logic"
+        };
+        String[] icons = {
+            "ph-brackets-square",
+            "ph-tree-structure",
+            "ph-cube",
+            "ph-graph",
+            "ph-function",
+            "ph-text-t"
+        };
+
+        // Cache solved problem IDs to avoid O(N*M) lookups in DB
+        java.util.Set<Long> solvedProblemIds = submissionService.getUserSubmissions(currentUser).stream()
+                .filter(s -> "Accepted".equals(s.getVerdict()))
+                .map(s -> s.getProblem().getId())
+                .collect(java.util.stream.Collectors.toSet());
+
+        java.util.List<TopicData> topics = new java.util.ArrayList<>();
+        for (int i = 0; i < topicNames.length; i++) {
+            String topicName = topicNames[i];
+            List<com.codeforce.model.Problem> topicProblems = problemService.findByTag(topicName);
+            long totalTopicProblems = topicProblems.size();
+            long solvedInTopic = topicProblems.stream()
+                    .filter(p -> solvedProblemIds.contains(p.getId()))
+                    .count();
+            
+            int progress = totalTopicProblems > 0 ? (int)((double)solvedInTopic / totalTopicProblems * 100) : 0;
+            topics.add(new TopicData(topicName, descriptions[i], icons[i], progress));
         }
 
         model.addAttribute("totalSolved", totalSolved);
         model.addAttribute("accuracy", String.format("%.1f", accuracy));
-        model.addAttribute("streak", 5); // Mock streak
-        model.addAttribute("topicProgress", topicProgress);
+        model.addAttribute("streak", 5);
+        model.addAttribute("topics", topics);
         model.addAttribute("recommendations", problemService.getRecommendedProblems(currentUser));
         model.addAttribute("currentUser", currentUser);
 

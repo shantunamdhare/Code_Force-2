@@ -30,6 +30,11 @@ public class TesterController {
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) return "redirect:/login";
+        
+        if (!"TESTER".equalsIgnoreCase(currentUser.getRole()) && !"ADMIN".equalsIgnoreCase(currentUser.getRole())) {
+            return "redirect:/";
+        }
         
         model.addAttribute("pendingProblems", testerService.getPendingProblems());
         model.addAttribute("allProblems", testerService.getAllProblems());
@@ -57,7 +62,7 @@ public class TesterController {
 
     @GetMapping("/quick-access")
     public String quickAccess(HttpSession session) {
-        return userService.findByHandle("syed")
+        return userService.findByHandle("tester")
                 .map(user -> {
                     session.setAttribute("currentUser", user);
                     return "redirect:/tester/dashboard";
@@ -90,6 +95,10 @@ public class TesterController {
     public String problemDetail(@PathVariable Long id, Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) return "redirect:/login";
+
+        if (!"TESTER".equalsIgnoreCase(currentUser.getRole()) && !"ADMIN".equalsIgnoreCase(currentUser.getRole())) {
+            return "redirect:/";
+        }
 
         return testerService.getProblem(id)
                 .map(problem -> {

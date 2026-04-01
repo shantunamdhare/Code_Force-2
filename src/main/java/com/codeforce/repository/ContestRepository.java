@@ -11,4 +11,5 @@ public interface ContestRepository extends JpaRepository<Contest, Long> {
     List<Contest> findAllByOrderByStartTimeDesc();
     List<Contest> findByPhase(String phase);
     List<Contest> findByNameContainingIgnoreCase(String name);
+    java.util.Optional<Contest> findByName(String name);
 }

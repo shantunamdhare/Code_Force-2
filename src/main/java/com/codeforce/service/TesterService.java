@@ -84,7 +84,7 @@ public class TesterService {
             testCase.setProblem(problem);
             testCase.setInput(input);
             testCase.setExpectedOutput(output);
-            testCase.setPublic(isPublic);
+            testCase.setPubliclyVisible(isPublic);
             return testCaseRepository.save(testCase);
         }).orElse(null);
     }
