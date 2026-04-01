@@ -3,6 +3,9 @@ package com.codeforce.controller;
 import com.codeforce.model.Contest;
 import com.codeforce.model.User;
 import com.codeforce.service.ContestService;
+import com.codeforce.service.UserService;
+import com.codeforce.service.BattleService;
+import com.codeforce.service.BattleService.BattleSession;
 import jakarta.servlet.http.HttpSession;
 import com.codeforce.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +22,15 @@ public class ContestController {
 
     private final ContestService contestService;
     private final ProblemService problemService;
+    private final UserService userService;
+    private final BattleService battleService;
 
     @Autowired
-    public ContestController(ContestService contestService, ProblemService problemService) {
+    public ContestController(ContestService contestService, ProblemService problemService, UserService userService, BattleService battleService) {
         this.contestService = contestService;
         this.problemService = problemService;
+        this.userService = userService;
+        this.battleService = battleService;
     }
 
     @GetMapping
@@ -115,7 +122,37 @@ public class ContestController {
     public String battleArena(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) return "redirect:/login";
+
+        BattleSession battleSession = battleService.getActiveSession(currentUser.getId()).orElse(null);
+        User opponent;
+        com.codeforce.model.Problem battleProblem;
+
+        if (battleSession != null) {
+            opponent = battleSession.getChallenger().getId().equals(currentUser.getId()) ? battleSession.getOpponent() : battleSession.getChallenger();
+            battleProblem = battleSession.getProblem();
+        } else {
+            // Initiate a NEW battle
+            List<User> allUsers = userService.findAll().stream()
+                    .filter(u -> !u.getId().equals(currentUser.getId()))
+                    .toList();
+            
+            opponent = (!allUsers.isEmpty()) 
+                    ? allUsers.get((int) (Math.random() * allUsers.size())) 
+                    : currentUser; 
+
+            List<com.codeforce.model.Problem> allProblems = problemService.getAllProblems();
+            battleProblem = (!allProblems.isEmpty())
+                    ? allProblems.get((int) (Math.random() * allProblems.size()))
+                    : null;
+
+            if (opponent != currentUser && battleProblem != null) {
+                battleService.initiateBattle(currentUser, opponent, battleProblem);
+            }
+        }
+
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("opponent", opponent);
+        model.addAttribute("battleProblem", battleProblem);
         return "battle";
     }
 }

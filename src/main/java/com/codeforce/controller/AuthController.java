@@ -45,6 +45,10 @@ public class AuthController {
                     
                     if ("ADMIN".equals(user.getRole())) {
                         return "redirect:/admin/dashboard";
+                    } else if ("ORGANIZER".equals(user.getRole())) {
+                        return "redirect:/organizer/dashboard";
+                    } else if ("TESTER".equals(user.getRole())) {
+                        return "redirect:/tester/dashboard";
                     }
                     return "redirect:/";
                 })

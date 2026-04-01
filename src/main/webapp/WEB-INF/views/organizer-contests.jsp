@@ -67,7 +67,7 @@
     <main class="main">
         <header class="header">
             <h1>Contest Registry</h1>
-            <button class="btn-action" style="background:var(--primary); color:var(--bg)">+ Create New Round</button>
+            <button class="btn-action" style="background:var(--primary); color:var(--bg)" onclick="openModal()">+ Create New Round</button>
         </header>
 
         <div class="table-card">
@@ -95,8 +95,8 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="#" class="btn-action">Edit</a>
-                                <a href="#" class="btn-action" style="margin-left: 8px">Stats</a>
+                                <button class="btn-action" onclick="openModal('${contest.id}', '${contest.name}', '${contest.startTime}', '${contest.durationSeconds / 60}', '${contest.type}')">Edit</button>
+                                <a href="${pageContext.request.contextPath}/contests/${contest.id}" class="btn-action" style="margin-left: 8px">View</a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -105,5 +105,90 @@
         </div>
     </main>
 
+    <!-- Modal for Create/Edit Contest -->
+    <div id="contestModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center;">
+        <div style="background:#0F172A; width:90%; max-width:600px; padding:40px; border-radius:32px; border:1px solid var(--border); color-scheme: dark;">
+            <h2 id="modalTitle" style="font-family:'Outfit'; font-size:2rem; margin-bottom:32px;">Schedule Contest</h2>
+            <form id="contestForm">
+                <input type="hidden" id="c_id">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+                    <div>
+                        <label style="display:block; margin-bottom:8px; color:#64748B; font-weight:600;">Contest Name</label>
+                        <input type="text" id="c_name" required style="width:100%; padding:14px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:white;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:8px; color:#64748B; font-weight:600;">Type</label>
+                        <select id="c_type" style="width:100%; padding:14px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:white;">
+                            <option value="Educational" style="background:#0F172A;">Educational</option>
+                            <option value="Div. 1" style="background:#0F172A;">Div. 1</option>
+                            <option value="Div. 2" style="background:#0F172A;">Div. 2</option>
+                            <option value="Div. 3" style="background:#0F172A;">Div. 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px;">
+                    <div>
+                        <label style="display:block; margin-bottom:8px; color:#64748B; font-weight:600;">Start Time</label>
+                        <input type="datetime-local" id="c_start" required style="width:100%; padding:14px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:white;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:8px; color:#64748B; font-weight:600;">Duration (m)</label>
+                        <input type="number" id="c_duration" value="120" required style="width:100%; padding:14px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:white;">
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:16px;">
+                    <button type="button" class="btn-action" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-action" style="background:var(--primary); color:var(--bg)">Save Contest</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id = '', name = '', start = '', duration = '', type = 'Educational') {
+            document.getElementById('c_id').value = id;
+            document.getElementById('c_name').value = name;
+            document.getElementById('c_type').value = type;
+            document.getElementById('c_duration').value = duration;
+            
+            // Format datetime-local string if start is provided
+            if (start) {
+                // Assuming start is like '2026-04-09T10:59:22'
+                const formattedStart = start.substring(0, 16);
+                document.getElementById('c_start').value = formattedStart;
+            } else {
+                document.getElementById('c_start').value = '';
+            }
+
+            document.getElementById('modalTitle').innerText = id ? 'Edit Contest' : 'Schedule New Contest';
+            document.getElementById('contestModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('contestModal').style.display = 'none';
+        }
+
+        document.getElementById('contestForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('c_name').value,
+                startTime: document.getElementById('c_start').value,
+                duration: document.getElementById('c_duration').value,
+                complexity: document.getElementById('c_type').value
+            };
+
+            const response = await fetch('/api/admin/publish-contest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error saving contest: ' + await response.text());
+            }
+        });
+    </script>
 </body>
 </html>

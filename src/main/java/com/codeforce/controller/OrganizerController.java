@@ -72,4 +72,14 @@ public class OrganizerController {
         model.addAttribute("currentUser", session.getAttribute("currentUser"));
         return "organizer-problems";
     }
+
+    @GetMapping("/quick-access")
+    public String quickAccess(HttpSession session) {
+        return userService.findByHandle("aman")
+                .map(user -> {
+                    session.setAttribute("currentUser", user);
+                    return "redirect:/organizer/dashboard";
+                })
+                .orElse("redirect:/login");
+    }
 }

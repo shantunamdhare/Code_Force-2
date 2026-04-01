@@ -195,7 +195,7 @@
                 <p>Monitor your contests, manage quality, and drive engagement.</p>
             </div>
             <div style="display:flex; gap:16px;">
-                 <button style="background:var(--primary); color:var(--dark); border:none; padding:14px 28px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="location.href='#'">
+                 <button style="background:var(--primary); color:var(--dark); border:none; padding:14px 28px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="location.href='${pageContext.request.contextPath}/organizer/contests'">
                     <i class="ph-bold ph-plus"></i> Create Contest
                  </button>
             </div>
@@ -225,76 +225,76 @@
             
             <div class="tools-grid">
                 <!-- 1. Create Contest -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/organizer/contests'">
                     <i class="ph ph-calendar-plus"></i>
                     <h4>Create & Schedule</h4>
                     <p>Initialize new competitive rounds with precise timing and metadata.</p>
                     <span class="badge">CORE</span>
                 </div>
                 <!-- 2. Manage Problems -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/organizer/problems'">
                     <i class="ph ph-files"></i>
                     <h4>Problem Master</h4>
                     <p>Select, arrange, and deploy problemsets from the global vault.</p>
                     <span class="badge">CORE</span>
                 </div>
                 <!-- 3. Testers -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-fingerprint"></i>
                     <h4>Quality Control</h4>
                     <p>Assign problems to expert testers for validation and feedback.</p>
                 </div>
                 <!-- 4. Lifecycle -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/organizer/contests'">
                     <i class="ph ph-git-merge"></i>
                     <h4>Contest Status</h4>
                     <p>Control the flow: Draft → Testing → Published → Live → Completed.</p>
                 </div>
                 <!-- 5. Participants -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-users-four"></i>
                     <h4>User Moderation</h4>
                     <p>Manage registrations, allow/deny entries, and set participant limits.</p>
                 </div>
                 <!-- 6. Sentinel -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-activity"></i>
                     <h4>Real-time Sentinel</h4>
                     <p>Monitor live submission peaks and active user sessions instantly.</p>
                     <span class="badge">LIVE</span>
                 </div>
                 <!-- 7. Leaderboard -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/organizer/contests'">
                     <i class="ph ph-snow-flake"></i>
                     <h4>Rankings Freeze</h4>
                     <p>Advanced feature to freeze rankings during the critical final 30 minutes.</p>
                 </div>
                 <!-- 8. Anti-Cheat -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-shield-warning"></i>
                     <h4>FairPlay Guard</h4>
                     <p>Integrated similarity detection and fraud monitoring system.</p>
                 </div>
                 <!-- 9. Announcements -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-megaphone"></i>
                     <h4>Relay Hub</h4>
                     <p>Broadcast critical updates and clarifications to all participants.</p>
                 </div>
                 <!-- 10. Clarifications -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/organizer/contests'">
                     <i class="ph ph-chats-circle"></i>
                     <h4>Query Resolver</h4>
                     <p>Direct communication channel with participants for problem doubts.</p>
                 </div>
                 <!-- 11. Analytics -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-chart-bar"></i>
                     <h4>Deep Analytics</h4>
                     <p>Post-contest review of success rates and participant performance.</p>
                 </div>
                 <!-- 12. Export -->
-                <div class="tool-card">
+                <div class="tool-card" onclick="location.href='${pageContext.request.contextPath}/admin/dashboard'">
                     <i class="ph ph-file-arrow-down"></i>
                     <h4>Vault Export</h4>
                     <p>Generate and download comprehensive contest reports and logs.</p>

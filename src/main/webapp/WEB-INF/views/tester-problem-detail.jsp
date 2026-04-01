@@ -39,7 +39,7 @@
                         <c:forEach var="tc" items="${testCases}">
                             <div class="sample-box" style="margin: 0; padding: 12px; border: 1px solid var(--border-light);">
                                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
-                                    <span>${tc.public ? 'Public' : 'Private'} Test Case</span>
+                                    <span>${tc.publiclyVisible ? 'Public' : 'Private'} Test Case</span>
                                 </div>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                                     <div><strong>In:</strong> <code style="display:block; padding: 4px; background: #f8f9fa;">${tc.input}</code></div>

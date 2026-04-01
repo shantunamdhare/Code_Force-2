@@ -40,7 +40,8 @@ public class UserService {
     public User register(User user) {
         user.setRank(user.getRankTitle());
         user.setMaxRank(user.getRankTitle());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Removing password encoding to store plain text as requested
+        user.setPassword(user.getPassword());
         return userRepository.save(user);
     }
 
@@ -170,5 +171,9 @@ public class UserService {
     public void coordinateTesting(Long contestId) {
         // Mock method for coordinating with testers
         System.out.println("Coordinating testing for contest id: " + contestId);
+    }
+
+    public long getCountWithHigherRating(Integer rating) {
+        return userRepository.countByRatingGreaterThan(rating);
     }
 }

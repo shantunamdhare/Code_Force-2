@@ -20,8 +20,8 @@ public class TestCase {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String expectedOutput;
 
-    @Column(nullable = false)
-    private boolean isPublic = false;
+    @Column(name = "is_public", nullable = false)
+    private boolean publiclyVisible = false;
 
     public TestCase() {}
 
@@ -33,6 +33,6 @@ public class TestCase {
     public void setInput(String input) { this.input = input; }
     public String getExpectedOutput() { return expectedOutput; }
     public void setExpectedOutput(String expectedOutput) { this.expectedOutput = expectedOutput; }
-    public boolean isPublic() { return isPublic; }
-    public void setPublic(boolean isPublic) { this.isPublic = isPublic; }
+    public boolean isPubliclyVisible() { return publiclyVisible; }
+    public void setPubliclyVisible(boolean publiclyVisible) { this.publiclyVisible = publiclyVisible; }
 }
