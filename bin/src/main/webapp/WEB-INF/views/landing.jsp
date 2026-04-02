@@ -265,6 +265,91 @@
         .footer-link { display: block; margin-bottom: 12px; color: var(--text-slate); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s; }
         .footer-link:hover { color: var(--primary-coral); padding-left: 5px; }
 
+        /* --- Organizer Suite: Dashboard Previews --- */
+        .organizer-section {
+            padding: 120px 6%;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .org-features-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .org-feature-item {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .org-feature-item:hover {
+            transform: translateX(10px);
+            border-color: var(--primary-teal);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        .org-icon {
+            width: 48px;
+            height: 48px;
+            background: #F8FAFC;
+            color: var(--primary-teal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .org-feature-item h4 { font-weight: 700; font-size: 1rem; color: var(--text-dark); margin:0 }
+
+        .org-login-card {
+            background: var(--text-dark);
+            border-radius: 32px;
+            padding: 48px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+        }
+
+        .org-login-card h3 { font-size: 2rem; margin-bottom: 24px; font-weight: 800; }
+        .org-login-card input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        .org-login-card input:focus { border-color: var(--primary-coral); }
+        .org-login-card .btn-org {
+            width: 100%;
+            background: var(--primary-coral);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .org-login-card .btn-org:hover { background: #ff5252; transform: translateY(-2px); }
+
     </style>
 </head>
 <body>
@@ -275,6 +360,8 @@
             <span>CodeForce</span>
         </a>
         <div class="header-btns">
+            <a href="${pageContext.request.contextPath}/practice" class="btn-lp btn-outline-lp" style="border-color: var(--primary-coral); color: var(--primary-coral);">Practice</a>
+            <a href="${pageContext.request.contextPath}/tester/quick-access" class="btn-lp btn-outline-lp" style="border-color: var(--primary-teal); color: var(--primary-teal);">Tester Area</a>
             <a href="${pageContext.request.contextPath}/login" class="btn-lp btn-outline-lp">Login</a>
             <a href="${pageContext.request.contextPath}/register" class="btn-lp btn-primary-lp">Get Professional <i class="ph ph-arrow-right"></i></a>
         </div>
@@ -328,7 +415,89 @@
         </div>
     </div>
 
+    <!-- Organizer Suite: Power Section -->
+    <section class="organizer-section">
+        <div>
+            <div class="hero-badge" style="color:var(--primary-teal); background:rgba(78,205,196,0.1)">
+                <i class="ph-fill ph-crown-simple"></i> CONTEST MASTER SUITE
+            </div>
+            <h2 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 48px; line-height: 1.1;">
+                Scale Your Competitive <br> <span style="color:var(--primary-teal)">Spirit Without Limits.</span>
+            </h2>
+
+            <div class="org-features-list">
+                <a href="${pageContext.request.contextPath}/organizer/contests" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-calendar-plus"></i></div>
+                    <h4>Contest Scheduler</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/problems" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-brackets-curly"></i></div>
+                    <h4>Problem Master</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-fingerprint"></i></div>
+                    <h4>Tester Workflow</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-git-merge"></i></div>
+                    <h4>Status Control</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-users-three"></i></div>
+                    <h4>Participant Mod</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-chart-line-up"></i></div>
+                    <h4>Real-time Sentinel</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-snow-flake"></i></div>
+                    <h4>Rankings Freeze</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-shield-check"></i></div>
+                    <h4>Anti-Cheat Monitor</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-megaphone"></i></div>
+                    <h4>Relay Hub</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-chats-circle"></i></div>
+                    <h4>Query Resolver</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-activity"></i></div>
+                    <h4>Deep Analytics</h4>
+                </a>
+                <a href="${pageContext.request.contextPath}/organizer/dashboard" class="org-feature-item">
+                    <div class="org-icon"><i class="ph-bold ph-file-arrow-down"></i></div>
+                    <h4>Data Vault Export</h4>
+                </a>
+            </div>
+        </div>
+
+        <div class="org-login-card">
+            <h3>Organizer Login</h3>
+            <p style="opacity: 0.6; margin-bottom: 32px; font-size: 0.9rem;">Access your private dashboards, manage ongoing rounds, and review submissions.</p>
+            <form action="${pageContext.request.contextPath}/login" method="post">
+                <input type="text" name="handle" placeholder="Organizer Handle" required>
+                <input type="password" name="password" placeholder="Passkey" required>
+                <button type="submit" class="btn-org">Launch Organizer Dash</button>
+            </form>
+            <div style="margin-top: 24px; text-align: center; font-size: 0.8rem; opacity: 0.5;">
+                <i class="ph-bold ph-lock-key"></i> Restricted Corporate Access
+            </div>
+        </div>
+    </section>
+
     <section class="features-grid">
+        <div class="feature-tile" style="border-color: var(--primary-coral); background: rgba(255, 107, 107, 0.02);">
+            <div class="tile-icon" style="background: var(--primary-coral); color: white;"><i class="ph-bold ph-graduation-cap"></i></div>
+            <h3>Guided Practice</h3>
+            <p>Master algorithms with structured learning paths. Track your progress across Math, DP, Graphs, and more with smart recommendations.</p>
+            <a href="${pageContext.request.contextPath}/practice" style="margin-top: 20px; display: inline-block; font-weight: 700; color: var(--primary-coral); text-decoration: none;">Start Learning <i class="ph ph-arrow-right"></i></a>
+        </div>
         <div class="feature-tile">
             <div class="tile-icon"><i class="ph-bold ph-lightning"></i></div>
             <h3>Atomic Speed</h3>

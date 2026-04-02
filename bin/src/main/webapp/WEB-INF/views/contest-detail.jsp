@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:include page="common/header.jsp">
     <jsp:param name="pageTitle" value="${contest.name}" />
@@ -94,6 +95,54 @@
                             <a href="${pageContext.request.contextPath}/login" style="color:var(--primary-coral);font-weight:600;">Login</a> to register for this contest.
                         </p>
                     </c:if>
+                </div>
+            </c:if>
+
+            <c:if test="${contest.phase == 'FINISHED'}">
+                <div style="margin-top: 40px; border-top: 2px solid #F1F5F9; pt-40;">
+                    <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 24px;">Post-Contest Results</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                        <div class="card" style="padding: 24px; background: #F8FAFC; border: 1px solid #E2E8F0;">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Official Result</div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--text-dark);">${officialScore} <span style="font-size: 1rem; opacity: 0.5;">/ ${fn:length(contestProblems)}</span></div>
+                        </div>
+                        <div class="card" style="padding: 24px; background: #EEF2FF; border: 1px solid #C7D2FE;">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-indigo); text-transform: uppercase;">Improved Mastery</div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary-indigo);">${improvedScore} <span style="font-size: 1rem; opacity: 0.5;">/ ${fn:length(contestProblems)}</span></div>
+                        </div>
+                    </div>
+
+                    <table class="table" style="width: 100%; border-collapse: separate; border-spacing: 0 12px;">
+                        <thead>
+                            <tr style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                                <th style="padding: 12px; text-align: left;">Problem</th>
+                                <th style="padding: 12px; text-align: center;">Official</th>
+                                <th style="padding: 12px; text-align: center;">Retry</th>
+                                <th style="padding: 12px; text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="prob" items="${contestProblems}">
+                                <tr style="background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border-radius: 12px;">
+                                    <td style="padding: 20px; border-radius: 12px 0 0 12px; font-weight: 700;">${prob.indexLetter}. ${prob.name}</td>
+                                    <td style="padding: 20px; text-align: center;">
+                                        <c:set var="offV" value="-" />
+                                        <c:forEach var="s" items="${officialSubmissions}"><c:if test="${s.problem.id == prob.id}"><c:set var="offV" value="${s.verdictShort}" /></c:if></c:forEach>
+                                        <span class="status-pill ${offV == 'AC' ? 'solved' : ''}">${offV}</span>
+                                    </td>
+                                    <td style="padding: 20px; text-align: center;">
+                                        <c:set var="retV" value="-" />
+                                        <c:forEach var="s" items="${secondChanceSubmissions}"><c:if test="${s.problem.id == prob.id}"><c:set var="retV" value="${s.verdictShort}" /></c:if></c:forEach>
+                                        <span class="status-pill ${retV == 'AC' ? 'solved' : ''}">${retV}</span>
+                                    </td>
+                                    <td style="padding: 20px; text-align: right; border-radius: 0 12px 12px 0;">
+                                        <a href="${pageContext.request.contextPath}/problem/${prob.id}?contestId=${contest.id}&retry=true" class="btn btn-primary btn-sm" style="background: var(--text-dark); border:none;">Retry</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </c:if>
 
