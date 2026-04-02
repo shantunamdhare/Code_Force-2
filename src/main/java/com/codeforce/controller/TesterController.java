@@ -51,23 +51,37 @@ public class TesterController {
                                HttpSession session, RedirectAttributes redirectAttributes) {
         return userService.login(username, password)
                 .map(user -> {
+                    if (!"TESTER".equalsIgnoreCase(user.getRole()) && !"ADMIN".equalsIgnoreCase(user.getRole())) {
+                        redirectAttributes.addFlashAttribute("error", "Access denied. This portal is for testers only.");
+                        return "redirect:/tester/quick-access";
+                    }
                     session.setAttribute("currentUser", user);
+                    
+                    // Set authentication in SecurityContext
+                    org.springframework.security.core.Authentication auth = 
+                        new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                            user.getHandle(), null, 
+                            java.util.Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                        );
+                    org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
+                    
                     return "redirect:/tester/dashboard";
                 })
                 .orElseGet(() -> {
-                    redirectAttributes.addFlashAttribute("error", "Invalid tester credentials");
-                    return "redirect:/tester/dashboard";
+                    redirectAttributes.addFlashAttribute("error", "Invalid tester credentials. Please try again.");
+                    return "redirect:/tester/quick-access";
                 });
     }
 
     @GetMapping("/quick-access")
-    public String quickAccess(HttpSession session) {
-        return userService.findByHandle("tester")
-                .map(user -> {
-                    session.setAttribute("currentUser", user);
-                    return "redirect:/tester/dashboard";
-                })
-                .orElse("redirect:/login");
+    public String quickAccess(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        // If already logged in as TESTER or ADMIN, go straight to dashboard
+        if (currentUser != null && 
+            ("TESTER".equalsIgnoreCase(currentUser.getRole()) || "ADMIN".equalsIgnoreCase(currentUser.getRole()))) {
+            return "redirect:/tester/dashboard";
+        }
+        return "tester-login";
     }
 
     @PostMapping("/dashboard/bug")

@@ -370,18 +370,20 @@ public class DataInitializer implements CommandLineRunner {
 
     private Contest createContest(String name, String type, String phase, int durationSeconds,
                                   LocalDateTime startTime, String description, int participantCount, String preparedBy) {
-        return contestRepository.findByName(name).orElseGet(() -> {
-            Contest contest = new Contest();
-            contest.setName(name);
-            contest.setType(type);
-            contest.setPhase(phase);
-            contest.setDurationSeconds(durationSeconds);
-            contest.setStartTime(startTime);
-            contest.setDescription(description);
-            contest.setParticipantCount(participantCount);
-            contest.setPreparedBy(preparedBy);
-            return contestRepository.save(contest);
-        });
+        List<Contest> existing = contestRepository.findByNameContainingIgnoreCase(name);
+        for (Contest c : existing) {
+            if (c.getName().equalsIgnoreCase(name)) return c;
+        }
+        Contest contest = new Contest();
+        contest.setName(name);
+        contest.setType(type);
+        contest.setPhase(phase);
+        contest.setDurationSeconds(durationSeconds);
+        contest.setStartTime(startTime);
+        contest.setDescription(description);
+        contest.setParticipantCount(participantCount);
+        contest.setPreparedBy(preparedBy);
+        return contestRepository.save(contest);
     }
 
     private Problem createProblem(String contestId, String indexLetter, String name, String statement,
